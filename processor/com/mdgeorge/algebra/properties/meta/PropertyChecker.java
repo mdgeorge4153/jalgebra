@@ -1,5 +1,9 @@
 package com.mdgeorge.algebra.properties.meta;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -11,17 +15,15 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.util.AbstractElementVisitor6;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.util.SimpleElementVisitor6;
 import javax.tools.Diagnostic.Kind;
 
 import com.mdgeorge.util.NotImplementedException;
 
-@SupportedAnnotationTypes("*")
+@SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.MagicProperty")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class PropertyChecker
      extends AbstractProcessor
@@ -31,16 +33,16 @@ public class PropertyChecker
 	}
 	
 	@Override
-	public boolean process ( Set<? extends TypeElement> annotations
+	public boolean process ( Set<? extends TypeElement> _
 	                       , RoundEnvironment           env
 	                       )
 	{
-		for (TypeElement e : annotations) {
-			MagicProperty mc = e.getAnnotation(MagicProperty.class); 
-			if (mc != null)
-			{
-				checkWellFormed(e);
-			}
+		note("foo");
+		
+
+		for (Element e : env.getElementsAnnotatedWith(MagicProperty.class)) {
+			assert e instanceof TypeElement;
+			checkWellFormed((TypeElement) e);
 		}
 		
 		return true;
@@ -58,15 +60,15 @@ public class PropertyChecker
 	 *  	<li>The remaining arguments correspond to arbitrary elements of their domains.</li>
 	 *  	</ol>
 	 *  </ol>  
-	 * @param magicType
+	 * @param magicProperty
 	 */
-	private void checkWellFormed(TypeElement magicType)
+	private void checkWellFormed(TypeElement magicProperty)
 	{
 		//
 		// walk over the contents of magicType to find a type called "Definition"
 		//
 		TypeElement definition = null;
-		for (final Element e : magicType.getEnclosedElements())
+		for (final Element e : magicProperty.getEnclosedElements())
 		{
 			definition = e.accept
 				( new SimpleElementVisitor6<TypeElement,Void>()
@@ -92,35 +94,31 @@ public class PropertyChecker
 		//
 		if (definition == null)
 		{
-			String message = "@MagicProperty annotation "
-			               + magicType.getSimpleName()
-			               + " requires a static inner class named 'Definition'"
-			               ;
-			processingEnv.getMessager().printMessage(Kind.ERROR, message, magicType);
+			error ( "@MagicProperty annotation "
+			        + magicProperty.getSimpleName()
+			        + " requires a static inner class named 'Definition'"
+			      , magicProperty
+			      );
 			return;
 		}
 
 		if (!definition.getModifiers().contains(Modifier.PUBLIC))
-		{
-			String message = magicType.getSimpleName() + ".Definition"
-			               + " must be public";
-			processingEnv.getMessager().printMessage(Kind.ERROR, message, definition);
-		}
+			error ( magicProperty.getSimpleName() + ".Definition must be public"
+			      , definition
+			      );
 		
 		if (!definition.getModifiers().contains(Modifier.STATIC))
-		{
-			String message = magicType.getSimpleName() + ".Definition"
-		                   + " must be static";
-			processingEnv.getMessager().printMessage(Kind.ERROR, message, definition);
-		}
+			error ( magicProperty.getSimpleName() + ".Definition must be static"
+			      , definition
+			      );
 		
 		//
 		// walk over the contents of definition to find a method called "check"
 		//
-		ExecutableElement check      = null;
+		List<ExecutableElement> checks = new ArrayList<ExecutableElement>();
 		for (Element e : definition.getEnclosedElements())
 		{
-			check = e.accept
+			ExecutableElement check = e.accept
 				( new SimpleElementVisitor6<ExecutableElement,Void> ()
 					{
 						@Override
@@ -136,40 +134,119 @@ public class PropertyChecker
 				);
 			
 			if (check != null)
-				break;
+				checks.add(check);
 		}
 		
 		//
-		// ensure we found an appropriate "check" method
+		// ensure we found one appropriate "check" method
 		//
-		if (check == null)
+		if (checks.isEmpty())
 		{
-			String message = "@MagicProperty annotation "
-			               + magicType.getSimpleName()
-			               + " requires a 'check' method in its 'Definition'"
-			               + " class."
-			               ;
-			processingEnv.getMessager().printMessage(Kind.ERROR, message, definition);
+			error ( "@MagicProperty annotation " +
+			        magicProperty.getSimpleName() +
+			        " requires a 'check' method in its 'Definition' class."
+			      , definition
+			      );
+			return;
+		}
+		else if (checks.size() > 1)
+		{
+			for (Element e : checks)
+				error ( "@MagicProperty Definitions should only have a " +
+				        "single 'check' method"
+				      , e
+				      );
 			return;
 		}
 
+		ExecutableElement check = checks.get(0);
+		
 		if (!check.getModifiers().contains(Modifier.PUBLIC))
 		{
-			String message = magicType.getSimpleName() + ".Definition.check"
+			String message = magicProperty.getSimpleName() + ".Definition.check"
 			               + " must be public";
-			processingEnv.getMessager().printMessage(Kind.ERROR, message, check);
+			error(message, check);
 		}
 		
-		if (!definition.getModifiers().contains(Modifier.STATIC))
+		if (!check.getModifiers().contains(Modifier.STATIC))
 		{
-			String message = magicType.getSimpleName() + ".Definition.check"
+			String message = magicProperty.getSimpleName() + ".Definition.check"
 		                   + " must be static";
-			processingEnv.getMessager().printMessage(Kind.ERROR, message, check);
+			error(message, check);
 		}
+		
+		//
+		// check must return boolean
+		//
+		if (!check.getReturnType().getKind().equals(TypeKind.BOOLEAN))
+			error ( "@MagicProperty 'check' function must return a boolean"
+			      , check
+			      );
+		
+		//
+		// verify check parameter types
+		//
+		
+		Iterator<? extends VariableElement> args = check.getParameters().iterator();
+
+		//
+		// first parameter should correspond to the annotated method
+		//
+		if (!args.hasNext())
+		{
+			error ( "@MagicProperty 'check' function must have at least one "
+			      + "argument"
+			      , check
+			      );
+			return;
+		}
+		
+		VariableElement methodArg = args.next();
+		// TODO: typecheck methodArg
+		
+		//
+		// next parameters should correspond to the annotation values
+		//
+		for (Element e : magicProperty.getEnclosedElements())
+			if (e.getKind().equals(ElementKind.METHOD))
+			{
+				if (!args.hasNext()) {
+					error ( "@MagicProperty 'check' method must have an "
+					      + "argument corresponding to the " + e.getSimpleName()
+					      + " property." 
+					      , check
+					      );
+					return;
+				}
+				else
+					// TODO: check argument type
+					args.next();
+			}
+			
+		//
+		// final parameters are the generated arguments to the test
+		//
+		
+		// TODO: checking?
+		
 	}
 	
+	
+	/*
+	 ** Private helper methods *************************************************
+	 */
+	
+	@SuppressWarnings("unused")
 	private void note(String message) {
 		processingEnv.getMessager().printMessage(Kind.NOTE, message);
 	}
+
+	private void error(String message, Element location) {
+		processingEnv.getMessager().printMessage(Kind.ERROR, message, location);
+	}
 	
+	@SuppressWarnings("unused")
+	private void warning(String message, Element location) {
+		processingEnv.getMessager().printMessage(Kind.WARNING, message, location);
+	}
 }

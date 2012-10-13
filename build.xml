@@ -7,6 +7,7 @@
 	<property name="algebra.classdir"   value="bin/algebra"       />
 
 	<target name="processor-classes">
+		<delete dir="${processor.classdir}/com" />
 		<javac srcdir="${processor.srcdir}" destdir="${processor.classdir}" includeantruntime="false" />
 	</target>
 
@@ -20,7 +21,6 @@
 	<target name="algebra" depends="processor-jar">
 		<!-- delete output, because ant/java suck and won't rebuild with new jar -->
 		<delete dir="${algebra.classdir}/com" />
-		<mkdir  dir="${algebra.classdir}" />
 		<javac srcdir="${algebra.srcdir}" destdir="${algebra.classdir}" includeantruntime="false" classpath="${processor.jar}" />
 	</target>
 
