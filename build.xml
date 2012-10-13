@@ -1,0 +1,24 @@
+<project name="algebra" basedir="." default="algebra" >
+
+	<property name="processor.srcdir"   value="processor"         />
+	<property name="processor.classdir" value="bin/processor"     />
+	<property name="processor.jar"      value="bin/processor.jar" />
+	<property name="algebra.srcdir"     value="src"               />
+	<property name="algebra.classdir"   value="bin/algebra"       />
+
+	<target name="processor-classes">
+		<javac srcdir="${processor.srcdir}" destdir="${processor.classdir}" includeantruntime="false" />
+	</target>
+
+	<target name="processor-jar" depends="processor-classes">
+		<jar jarfile="${processor.jar}">
+			<fileset dir="${processor.classdir}" />
+			<service type="javax.annotation.processing.Processor" provider="com.mdgeorge.algebra.properties.meta.PropertyChecker" />
+		</jar>
+	</target>
+
+	<target name="algebra" depends="processor-jar">
+		<javac srcdir="${algebra.srcdir}" destdir="${algebra.classdir}" includeantruntime="false" classpath="${processor.jar}" />
+	</target>
+
+</project>
