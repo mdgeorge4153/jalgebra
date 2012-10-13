@@ -18,6 +18,9 @@
 	</target>
 
 	<target name="algebra" depends="processor-jar">
+		<!-- delete output, because ant/java suck and won't rebuild with new jar -->
+		<delete dir="${algebra.classdir}/com" />
+		<mkdir  dir="${algebra.classdir}" />
 		<javac srcdir="${algebra.srcdir}" destdir="${algebra.classdir}" includeantruntime="false" classpath="${processor.jar}" />
 	</target>
 
