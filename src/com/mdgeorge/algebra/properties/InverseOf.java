@@ -1,13 +1,13 @@
 package com.mdgeorge.algebra.properties;
 
 import com.mdgeorge.algebra.properties.meta.Binary;
-import com.mdgeorge.algebra.properties.meta.MagicCheck;
+import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
 import com.mdgeorge.algebra.properties.meta.MethodRef;
 import com.mdgeorge.algebra.properties.meta.Nullary;
 import com.mdgeorge.algebra.properties.meta.Unary;
 
-@MagicCheck
+@MagicProperty
 public @interface InverseOf {
 	@MethodName String eq    () default "eq";
 	@MethodName String value ();

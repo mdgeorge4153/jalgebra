@@ -1,6 +1,5 @@
 package com.mdgeorge.algebra.properties.meta;
 
-import java.lang.reflect.Modifier;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -11,6 +10,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
@@ -36,7 +36,7 @@ public class PropertyChecker
 	                       )
 	{
 		for (TypeElement e : annotations) {
-			MagicCheck mc = e.getAnnotation(MagicCheck.class); 
+			MagicProperty mc = e.getAnnotation(MagicProperty.class); 
 			if (mc != null)
 			{
 				checkWellFormed(e);
@@ -47,7 +47,7 @@ public class PropertyChecker
 	}
 
 	/**
-	 * This method checks whether a type is a well-formed @MagicCheck type. 
+	 * This method checks whether a type is a well-formed @MagicProperty type. 
 	 * A type I is well-formed if: <ol>
 	 * 	<li>I is an annotation with @Target(METHOD)</li>
 	 *  <li>I contains a public static inner class named <code>Definition</code></li>
@@ -66,17 +66,16 @@ public class PropertyChecker
 		// walk over the contents of magicType to find a type called "Definition"
 		//
 		TypeElement definition = null;
-		for (Element e : magicType.getEnclosedElements())
+		for (final Element e : magicType.getEnclosedElements())
 		{
 			definition = e.accept
 				( new SimpleElementVisitor6<TypeElement,Void>()
 					{
 						@Override
-						public TypeElement visitType(TypeElement e, Void _)
+						public TypeElement visitType(TypeElement te, Void _)
 						{
-							processingEnv.getMessager().printMessage(Kind.NOTE, "checking " + e.getSimpleName());
-							if (e.getSimpleName().equals("Definition"))
-								return e;
+							if (te.getSimpleName().contentEquals("Definition"))
+								return te;
 							else
 								return null;
 						}
@@ -93,14 +92,14 @@ public class PropertyChecker
 		//
 		if (definition == null)
 		{
-			String message = "@MagicCheck annotation "
+			String message = "@MagicProperty annotation "
 			               + magicType.getSimpleName()
 			               + " requires a static inner class named 'Definition'"
 			               ;
 			processingEnv.getMessager().printMessage(Kind.ERROR, message, magicType);
 			return;
 		}
-		
+
 		if (!definition.getModifiers().contains(Modifier.PUBLIC))
 		{
 			String message = magicType.getSimpleName() + ".Definition"
@@ -127,7 +126,7 @@ public class PropertyChecker
 						@Override
 						public ExecutableElement visitExecutable(ExecutableElement e, Void _)
 						{
-							if (e.getSimpleName().equals("check"))
+							if (e.getSimpleName().contentEquals("check"))
 								return e;
 							else
 								return null;
@@ -145,7 +144,7 @@ public class PropertyChecker
 		//
 		if (check == null)
 		{
-			String message = "@MagicCheck annotation "
+			String message = "@MagicProperty annotation "
 			               + magicType.getSimpleName()
 			               + " requires a 'check' method in its 'Definition'"
 			               + " class."
@@ -167,6 +166,10 @@ public class PropertyChecker
 		                   + " must be static";
 			processingEnv.getMessager().printMessage(Kind.ERROR, message, check);
 		}
+	}
+	
+	private void note(String message) {
+		processingEnv.getMessager().printMessage(Kind.NOTE, message);
 	}
 	
 }

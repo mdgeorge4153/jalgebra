@@ -1,5 +1,8 @@
 package com.mdgeorge.algebra;
 
+import com.mdgeorge.algebra.properties.meta.MagicCheck;
+
+@MagicCheck
 public class Z implements IntegralDomain<Integer> {
 
 	public final static Z instance = new Z();

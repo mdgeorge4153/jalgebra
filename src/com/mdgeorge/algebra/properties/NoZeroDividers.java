@@ -1,7 +1,7 @@
 package com.mdgeorge.algebra.properties;
 
-import com.mdgeorge.algebra.properties.meta.MagicCheck;
+import com.mdgeorge.algebra.properties.meta.MagicProperty;
 
-@MagicCheck
+@MagicProperty
 public @interface NoZeroDividers {
 }

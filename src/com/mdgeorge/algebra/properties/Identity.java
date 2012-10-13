@@ -3,7 +3,7 @@ package com.mdgeorge.algebra.properties;
 import java.lang.annotation.*;
 
 import com.mdgeorge.algebra.properties.meta.Binary;
-import com.mdgeorge.algebra.properties.meta.MagicCheck;
+import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
 import com.mdgeorge.algebra.properties.meta.Nullary;
 
@@ -18,7 +18,7 @@ import com.mdgeorge.algebra.properties.meta.Nullary;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
-@MagicCheck
+@MagicProperty
 public @interface Identity {
 	@MethodName String eq    () default "eq";
 	@MethodName String value ();
