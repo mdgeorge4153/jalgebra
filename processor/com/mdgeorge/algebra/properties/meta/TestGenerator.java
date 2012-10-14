@@ -70,6 +70,8 @@ public class TestGenerator
 		// if property has a method K, then  
 		Map<ExecutableElement, ExecutableElement> methodArgs = new HashMap<ExecutableElement, ExecutableElement> ();
 		
+		methodArgs.put(null, method);
+		
 		for ( Map.Entry<? extends ExecutableElement,? extends AnnotationValue> e
 		    : util.eu.getElementValuesWithDefaults(property).entrySet())
 		{
@@ -102,6 +104,9 @@ public class TestGenerator
 				continue;
 			}
 
+			//
+			// look up the method
+			//
 			
 			String methodName;
 			
@@ -193,6 +198,9 @@ public class TestGenerator
 			}
 			else
 			{
+				//
+				// Life is much easier - we are given the method name directly
+				//
 				methodName = argValue;
 			}
 			
@@ -218,6 +226,15 @@ public class TestGenerator
 			}
 			
 			methodArgs.put(argDecl, methods.get(0));
+		}
+		
+		for (Map.Entry<ExecutableElement, ExecutableElement> e : methodArgs.entrySet())
+		{
+			String note = "\t";
+			note += e.getKey() == null ? "this" : e.getKey().getSimpleName();
+			note += " --> ";
+			note += e.getValue() + " : " + e.getValue().getReturnType();
+			util.note ( note );
 		}
 	}
 	
