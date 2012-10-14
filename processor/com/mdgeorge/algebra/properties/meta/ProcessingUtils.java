@@ -109,11 +109,11 @@ public class ProcessingUtils {
 	/**
 	 * Find all elements of the given container with the given simple name.
 	 */
-	public List<Element> findBySimpleName(Element container, String name)
+	public List<Element> findBySimpleName(TypeElement container, String name)
 	{
 		final List<Element> result = new ArrayList<Element> ();
 		
-		for (Element child : container.getEnclosedElements())
+		for (Element child : eu.getAllMembers(container))
 			if (child.getSimpleName().contentEquals(name))
 				result.add(child);
 		

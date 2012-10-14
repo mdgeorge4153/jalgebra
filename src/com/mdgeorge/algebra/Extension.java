@@ -1,7 +1,9 @@
 package com.mdgeorge.algebra;
 
+import com.mdgeorge.algebra.properties.meta.MagicCheck;
 import com.mdgeorge.util.NotImplementedException;
 
+@MagicCheck
 public class Extension< E
                       , R extends Ring<E>
                       , S extends Extension.Signature<E>

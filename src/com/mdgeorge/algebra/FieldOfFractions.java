@@ -1,5 +1,8 @@
 package com.mdgeorge.algebra;
 
+import com.mdgeorge.algebra.properties.meta.MagicCheck;
+
+@MagicCheck
 public class FieldOfFractions<E, D extends IntegralDomain<E>>
   implements Field<Fraction<E,E>>
 {

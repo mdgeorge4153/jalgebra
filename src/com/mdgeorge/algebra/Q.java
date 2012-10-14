@@ -1,5 +1,8 @@
 package com.mdgeorge.algebra;
 
+import com.mdgeorge.algebra.properties.meta.MagicCheck;
+
+@MagicCheck
 public class Q extends FieldOfFractions<Integer, Z> {
 	public final static Q instance = new Q();
 	

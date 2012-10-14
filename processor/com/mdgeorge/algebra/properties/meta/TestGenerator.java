@@ -61,7 +61,7 @@ public class TestGenerator
 	{
 		String propertyName = "@" + property.getAnnotationType().asElement().getSimpleName(); 
 		
-		util.note( util.methodName(method) + ": " + propertyName);
+		// util.note( util.methodName(method) + ": " + propertyName);
 		
 		//
 		// find all of the annotation value methods
@@ -230,11 +230,13 @@ public class TestGenerator
 		
 		for (Map.Entry<ExecutableElement, ExecutableElement> e : methodArgs.entrySet())
 		{
+			/*
 			String note = "\t";
 			note += e.getKey() == null ? "this" : e.getKey().getSimpleName();
 			note += " --> ";
 			note += e.getValue() + " : " + e.getValue().getReturnType();
 			util.note ( note );
+			*/
 		}
 	}
 	
