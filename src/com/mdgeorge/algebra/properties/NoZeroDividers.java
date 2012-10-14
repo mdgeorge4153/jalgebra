@@ -1,16 +1,16 @@
 package com.mdgeorge.algebra.properties;
 
-import com.mdgeorge.algebra.properties.meta.Binary;
+import com.mdgeorge.algebra.properties.meta.OpBinary;
 import com.mdgeorge.algebra.properties.meta.MagicProperty;
-import com.mdgeorge.algebra.properties.meta.Nullary;
+import com.mdgeorge.algebra.properties.meta.OpNullary;
 
 @MagicProperty
 public @interface NoZeroDividers {
 	
 	public static class Definition {
 		public static <E>
-		boolean check ( Binary<E,E,E> m
-		              , Binary<E,E,Boolean> eq, Nullary<E> zero
+		boolean check ( OpBinary<E,E,E> m
+		              , OpBinary<E,E,Boolean> eq, OpNullary<E> zero
 		              , E a, E b
 		              )
 		{

@@ -2,7 +2,7 @@ package com.mdgeorge.algebra.properties;
 
 import java.lang.annotation.*;
 
-import com.mdgeorge.algebra.properties.meta.Binary;
+import com.mdgeorge.algebra.properties.meta.OpBinary;
 import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
 
@@ -25,8 +25,8 @@ public @interface Associative {
 	
 	public static class Definition {
 		public static <E>
-		boolean check ( Binary<E,E,E> m
-		               , Binary<E,E,Boolean> eq
+		boolean check ( OpBinary<E,E,E> m
+		               , OpBinary<E,E,Boolean> eq
 		               , E a, E b, E c
 		               )
 		{

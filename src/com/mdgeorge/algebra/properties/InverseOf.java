@@ -1,11 +1,11 @@
 package com.mdgeorge.algebra.properties;
 
-import com.mdgeorge.algebra.properties.meta.Binary;
+import com.mdgeorge.algebra.properties.meta.OpBinary;
 import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
 import com.mdgeorge.algebra.properties.meta.MethodRef;
-import com.mdgeorge.algebra.properties.meta.Nullary;
-import com.mdgeorge.algebra.properties.meta.Unary;
+import com.mdgeorge.algebra.properties.meta.OpNullary;
+import com.mdgeorge.algebra.properties.meta.OpUnary;
 
 @MagicProperty
 public @interface InverseOf {
@@ -15,8 +15,8 @@ public @interface InverseOf {
 	
 	public static class Definition {
 		public static <E>
-		boolean check ( Unary<E,E> m
-		              , Binary<E,E,Boolean> eq, Binary<E,E,E> value, Nullary<E> id
+		boolean check ( OpUnary<E,E> m
+		              , OpBinary<E,E,Boolean> eq, OpBinary<E,E,E> value, OpNullary<E> id
 		              , E a
 		              )
 		{

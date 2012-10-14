@@ -2,7 +2,7 @@ package com.mdgeorge.algebra.properties;
 
 import java.lang.annotation.*;
 
-import com.mdgeorge.algebra.properties.meta.Binary;
+import com.mdgeorge.algebra.properties.meta.OpBinary;
 import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
 
@@ -25,7 +25,7 @@ public @interface DistributesOver {
 	
 	public static class Definition {
 		public static <S,E>
-		boolean check (Binary <S,E,E> m, Binary<E,E,Boolean> eq, Binary<E,E,E> value
+		boolean check (OpBinary <S,E,E> m, OpBinary<E,E,Boolean> eq, OpBinary<E,E,E> value
 		              , S a, E b, E c
 		              )
 		{
