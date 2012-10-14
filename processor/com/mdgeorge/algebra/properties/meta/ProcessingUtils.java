@@ -1,5 +1,6 @@
 package com.mdgeorge.algebra.properties.meta;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +66,16 @@ public class ProcessingUtils {
 			if (a.getAnnotationType().asElement().equals(type))
 				result.add(a);
 		return result;
+	}
+	
+	
+	/**
+	 * Find all annotations of a given type on any method that the given method
+	 * overrides.
+	 */
+	public List<AnnotationMirror> findAllAnnotationsOf(ExecutableElement method, Class<? extends Annotation> type)
+	{
+		return findAllAnnotationsOf(method, eu.getTypeElement(type.getCanonicalName()));
 	}
 
 	/**

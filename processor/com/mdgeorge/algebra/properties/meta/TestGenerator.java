@@ -82,19 +82,21 @@ public class TestGenerator
 			if (argDecl.getReturnType().equals(util.eu.getTypeElement("java.lang.String")))
 			{
 				util.warning( "The MagicProperty " + propertyName + " " +
-				              "is malformed."
+				              "is malformed " +
+				              "(" + argDecl.getSimpleName() + "is not a String)."
 				            , method
 				            );
 				continue;
 			}
 
-			boolean isMethodName = argDecl.getAnnotation(MethodName.class) != null;
-			boolean isMethodRef  = argDecl.getAnnotation(MethodRef.class)  != null;
+			boolean isMethodName = !util.findAllAnnotationsOf(argDecl, MethodName.class).isEmpty();
+			boolean isMethodRef  = !util.findAllAnnotationsOf(argDecl, MethodRef.class).isEmpty();
 
-			if (isMethodName ^ isMethodRef)
+			if (!(isMethodName ^ isMethodRef))
 			{
 				util.warning ( "The MagicProperty " + propertyName + " " +
-				               "is malformed."
+				               "is malformed " +
+				               "(" + argValue + " not annotated properly)."
 				             , method
 				             );
 				continue;
