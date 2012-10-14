@@ -8,20 +8,20 @@ import com.mdgeorge.algebra.properties.meta.OpNullary;
 import com.mdgeorge.algebra.properties.meta.OpUnary;
 
 @MagicProperty
-public @interface InverseOf {
+public @interface Inverse {
 	@MethodName String eq    () default "eq";
 	@MethodName String value ();
-	@MethodRef  String id    () default "Identity";
+	@MethodRef  String id    () default "com.mdgeorge.algebra.properties.Identity";
 	
 	public static class Definition {
 		public static <E>
-		boolean check ( OpUnary<E,E> m
-		              , OpBinary<E,E,Boolean> eq, OpBinary<E,E,E> value, OpNullary<E> id
+		boolean check ( OpBinary<E,E,E> m
+		              , OpBinary<E,E,Boolean> eq, OpUnary<E,E> value, OpNullary<E> id
 		              , E a
 		              )
 		{
-			return eq.ap (id.ap(), value.ap(a, m.ap(a)))
-			    && eq.ap (id.ap(), value.ap(m.ap(a), a));
+			return eq.ap (id.ap(), m.ap(a, value.ap(a)))
+			    && eq.ap (id.ap(), m.ap(value.ap(a), a));
 		}
 	}
 }
