@@ -8,20 +8,26 @@
 
 	<target name="processor-classes">
 		<delete dir="${processor.classdir}/com" />
-		<javac srcdir="${processor.srcdir}" destdir="${processor.classdir}" includeantruntime="false" />
+		<javac srcdir="${processor.srcdir}" destdir="${processor.classdir}" includeantruntime="false" debug="true"/>
 	</target>
 
 	<target name="processor-jar" depends="processor-classes">
 		<jar jarfile="${processor.jar}">
 			<fileset dir="${processor.classdir}" />
 			<service type="javax.annotation.processing.Processor" provider="com.mdgeorge.algebra.properties.meta.PropertyChecker" />
+			<service type="javax.annotation.processing.Processor" provider="com.mdgeorge.algebra.properties.meta.TestGenerator"   />
 		</jar>
 	</target>
 
 	<target name="algebra" depends="processor-jar">
 		<!-- delete output, because ant/java suck and won't rebuild with new jar -->
 		<delete dir="${algebra.classdir}/com" />
-		<javac srcdir="${algebra.srcdir}" destdir="${algebra.classdir}" includeantruntime="false" classpath="${processor.jar}" />
+		<javac
+			srcdir="${algebra.srcdir}"
+			destdir="${algebra.classdir}"
+			includeantruntime="false"
+			classpath="${processor.jar}"
+		/>
 	</target>
 
 </project>
