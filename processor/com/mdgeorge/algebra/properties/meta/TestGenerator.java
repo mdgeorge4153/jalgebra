@@ -50,18 +50,21 @@ public class TestGenerator
 		Elements util = processingEnv.getElementUtils();
 		for (ExecutableElement m : ElementFilter.methodsIn(util.getAllMembers(e)))
 		{
-			note("in " + m.getSimpleName() + ":");
-			for (AnnotationMirror a : findAllAnnotations(m, e))
-				note("\t" + a.getAnnotationType());
+			for (AnnotationMirror a : findAllAnnotations(m))
+				if (isMagic(a))
+					note( methodName(m)
+					    + ": " + a.getAnnotationType().asElement().getSimpleName()
+					    );
 		}
 	}
+	
 	
 	/**
 	 * Find all of the annotations on any method that the given method overrides.
 	 */
 	private List<AnnotationMirror> findAllAnnotations(ExecutableElement method)
 	{
-		return findAllAnnotations(method);
+		return findAllAnnotations(method, (TypeElement) method.getEnclosingElement());
 	}
 	
 	/**
@@ -97,17 +100,43 @@ public class TestGenerator
 	}
 
 	
+	/*
+	 ** Convenience Methods **************************************************** 
+	 */
 	
+	private String methodName(ExecutableElement m) {
+		return m.getEnclosingElement().getSimpleName()
+		     + "."
+		     + m.getSimpleName();
+	}
 	
+	/**
+	 * Convenience method to determine if a given annotation is a @MagicProperty.
+	 */
+	private boolean isMagic(AnnotationMirror a){
+		return a.getAnnotationType().asElement()
+				.getAnnotation(MagicProperty.class) != null;
+	}
+	
+	/**
+	 * Log a note to the messager.
+	 */
 	@SuppressWarnings("unused")
 	private void note(String message) {
 		processingEnv.getMessager().printMessage(Kind.NOTE, message);
 	}
 
+	/**
+	 * Log an error to the messager.
+	 */
+	@SuppressWarnings("unused")
 	private void error(String message, Element location) {
 		processingEnv.getMessager().printMessage(Kind.ERROR, message, location);
 	}
 	
+	/**
+	 * Log a warning to the messager.
+	 */
 	@SuppressWarnings("unused")
 	private void warning(String message, Element location) {
 		processingEnv.getMessager().printMessage(Kind.WARNING, message, location);
