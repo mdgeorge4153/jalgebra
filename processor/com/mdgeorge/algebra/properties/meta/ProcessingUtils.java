@@ -53,6 +53,20 @@ public class ProcessingUtils {
 		return findAllAnnotations(method, (TypeElement) method.getEnclosingElement());
 	}
 	
+	
+	/**
+	 * Find all annotations of a given type on any method that the given method
+	 * overrides.
+	 */
+	public List<AnnotationMirror> findAllAnnotationsOf(ExecutableElement method, TypeElement type)
+	{
+		List<AnnotationMirror> result = new ArrayList<AnnotationMirror> ();
+		for (AnnotationMirror a : findAllAnnotations(method))
+			if (a.getAnnotationType().asElement().equals(type))
+				result.add(a);
+		return result;
+	}
+
 	/**
 	 * Recursive helper method for findAllAnnotations.  Returns all annotations
 	 * on methods from container or any supertype of container that are
@@ -78,7 +92,7 @@ public class ProcessingUtils {
 
 		return result;
 	}
-
+	
 	/**
 	 * Find all elements of the given container with the given simple name.
 	 */

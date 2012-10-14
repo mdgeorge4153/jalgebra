@@ -74,35 +74,60 @@ public class PropertyChecker
 			           );
 		
 		//
-		// walk over the contents of magicType to find a type called "Definition"
+		// check annotation values
+		//
+		for (ExecutableElement value : ElementFilter.methodsIn(property.getEnclosedElements()))
+			checkAnnotationValue(property, value);
+
+		//
+		// find and check Definition inner class
 		//
 		List<TypeElement> definitions = ElementFilter.typesIn (util.findBySimpleName(property, "Definition"));
 		
 		if (definitions.isEmpty())
-		{
 			util.error ( "@MagicProperty annotation "  +
 			             property.getSimpleName() +
 			             " requires a static inner class named 'Definition'"
 			           , property
 			           );
-			return;
-		}
-		else if (definitions.size() > 1)
-		{
+		
+		if (definitions.size() > 1)
 			for (TypeElement e : definitions)
 				util.error ( "@MagicProperty annotation "  +
 				             property.getSimpleName() +
 			                 " cannot have multiple Definitions"
 				           , e
 				           );
-			return;
-		}
 
-		// TODO: check annotation arguments
-		
-		checkDefinition(property, definitions.get(0));
+		for (TypeElement definition : definitions)
+			checkDefinition(property, definition);
 	}
 
+	/**
+	 * Check that the annotation value has the appropriate type.
+	 */
+	private void checkAnnotationValue(TypeElement property, ExecutableElement value)
+	{
+		
+		if (value.getReturnType().equals(util.eu.getTypeElement("java.lang.String")))
+			util.error( "@MagicProperty values must be Strings", value);
+		
+		boolean isMethodName = value.getAnnotation(MethodName.class) != null;
+		boolean isMethodRef  = value.getAnnotation(MethodRef.class)  != null;
+
+		if (!isMethodName && !isMethodRef)
+			util.error ( "@MagicProperty values must be marked as either " +
+			             "@MethodName or @MethodRef"
+			           , value
+			           );
+		
+		if (isMethodName && isMethodRef)
+			util.error ( "@MagicProperty values cannot be marked both " +
+			             "@MethodName and @MethodRef"
+			           , value
+			           );
+	}
+	
 	/**
 	 * Check that the given definition is suitable for the given property.
 	 */
@@ -129,25 +154,21 @@ public class PropertyChecker
 		List<ExecutableElement> checks = ElementFilter.methodsIn(util.findBySimpleName(definition, "check"));
 		
 		if (checks.isEmpty())
-		{
 			util.error ( "@MagicProperty annotation " +
 			             property.getSimpleName() +
 			             " requires a 'check' method in its 'Definition' class."
 			           , definition
 			           );
-			return;
-		}
+
 		else if (checks.size() > 1)
-		{
 			for (Element e : checks)
 				util.error ( "@MagicProperty Definitions should only have a " +
 				             "single 'check' method"
 				           , e
 				           );
-			return;
-		}
 
-		checkCheckMethod(property, definition, checks.get(0));
+		for (ExecutableElement check : checks)
+			checkCheckMethod(property, definition, check);
 	}
 
 	
