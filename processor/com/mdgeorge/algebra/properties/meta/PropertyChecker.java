@@ -1,6 +1,5 @@
 package com.mdgeorge.algebra.properties.meta;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,8 +20,11 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.util.SimpleElementVisitor6;
 import javax.tools.Diagnostic.Kind;
 
-import com.mdgeorge.util.NotImplementedException;
-
+/**
+ * This class checks 
+ * @author mdgeorge
+ *
+ */
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.MagicProperty")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class PropertyChecker
@@ -37,9 +39,6 @@ public class PropertyChecker
 	                       , RoundEnvironment           env
 	                       )
 	{
-		note("foo");
-		
-
 		for (Element e : env.getElementsAnnotatedWith(MagicProperty.class)) {
 			assert e instanceof TypeElement;
 			checkWellFormed((TypeElement) e);
@@ -64,6 +63,14 @@ public class PropertyChecker
 	 */
 	private void checkWellFormed(TypeElement magicProperty)
 	{
+		//
+		// check that magicProperty is an annotation
+		//
+		if (!magicProperty.getKind().equals(ElementKind.ANNOTATION_TYPE))
+			error ( "@MagicProperties must be annotations"
+			      , magicProperty
+			      );
+		
 		//
 		// walk over the contents of magicType to find a type called "Definition"
 		//
