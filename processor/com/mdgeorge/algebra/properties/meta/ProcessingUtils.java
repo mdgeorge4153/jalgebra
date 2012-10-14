@@ -2,7 +2,9 @@ package com.mdgeorge.algebra.properties.meta;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
@@ -49,7 +51,7 @@ public class ProcessingUtils {
 	/**
 	 * Find all of the annotations on any method that the given method overrides.
 	 */
-	public List<AnnotationMirror> findAllAnnotations(ExecutableElement method)
+	public Set<AnnotationMirror> findAllAnnotations(ExecutableElement method)
 	{
 		return findAllAnnotations(method, (TypeElement) method.getEnclosingElement());
 	}
@@ -59,9 +61,9 @@ public class ProcessingUtils {
 	 * Find all annotations of a given type on any method that the given method
 	 * overrides.
 	 */
-	public List<AnnotationMirror> findAllAnnotationsOf(ExecutableElement method, TypeElement type)
+	public Set<AnnotationMirror> findAllAnnotationsOf(ExecutableElement method, TypeElement type)
 	{
-		List<AnnotationMirror> result = new ArrayList<AnnotationMirror> ();
+		Set<AnnotationMirror> result = new HashSet<AnnotationMirror> ();
 		for (AnnotationMirror a : findAllAnnotations(method))
 			if (a.getAnnotationType().asElement().equals(type))
 				result.add(a);
@@ -73,7 +75,7 @@ public class ProcessingUtils {
 	 * Find all annotations of a given type on any method that the given method
 	 * overrides.
 	 */
-	public List<AnnotationMirror> findAllAnnotationsOf(ExecutableElement method, Class<? extends Annotation> type)
+	public Set<AnnotationMirror> findAllAnnotationsOf(ExecutableElement method, Class<? extends Annotation> type)
 	{
 		return findAllAnnotationsOf(method, eu.getTypeElement(type.getCanonicalName()));
 	}
@@ -83,9 +85,9 @@ public class ProcessingUtils {
 	 * on methods from container or any supertype of container that are
 	 * overridden by the given method. 
 	 */
-	private List<AnnotationMirror> findAllAnnotations(ExecutableElement method, TypeElement container)
+	private Set<AnnotationMirror> findAllAnnotations(ExecutableElement method, TypeElement container)
 	{
-		final List<AnnotationMirror> result = new ArrayList<AnnotationMirror>();
+		final Set<AnnotationMirror> result = new HashSet<AnnotationMirror>();
 
 		// recursively find annotations in container's parents
 		if (container.getSuperclass().getKind().equals(TypeKind.DECLARED))

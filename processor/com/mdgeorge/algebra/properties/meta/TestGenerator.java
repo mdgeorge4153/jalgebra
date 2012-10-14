@@ -166,7 +166,7 @@ public class TestGenerator
 				// Get the referred-to annotation from the method. 
 				//
 				
-				List<AnnotationMirror> annots = util.findAllAnnotationsOf(method, refType);
+				Set<AnnotationMirror> annots = util.findAllAnnotationsOf(method, refType);
 				
 				if (annots.isEmpty())
 				{
@@ -188,7 +188,7 @@ public class TestGenerator
 					continue;
 				}
 				
-				AnnotationMirror refVal = annots.get(0); 
+				AnnotationMirror refVal = annots.iterator().next(); 
 				
 				//
 				// Get the "value" field of the referred-to annotation.
