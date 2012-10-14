@@ -57,7 +57,7 @@ public class Extension< E
 	}
 
 	@Override
-	public boolean eq(Element a, Element b) {
+	public Boolean eq(Element a, Element b) {
 		for (int i = 0; i < n; i++)
 			if (!r.eq(a.coeffs[i], b.coeffs[i]))
 				return false;

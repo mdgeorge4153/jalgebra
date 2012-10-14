@@ -15,5 +15,5 @@ import com.mdgeorge.algebra.properties.*;
  */
 public interface Set<E> {
 	@Reflexive @Transitive @Symmetric
-	boolean eq (E a, E b);
+	Boolean eq (E a, E b);
 }

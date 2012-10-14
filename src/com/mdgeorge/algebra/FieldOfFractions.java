@@ -44,7 +44,7 @@ public class FieldOfFractions<E, D extends IntegralDomain<E>>
 	}
 
 	@Override
-	public boolean eq(Fraction<E, E> a, Fraction<E, E> b) {
+	public Boolean eq(Fraction<E, E> a, Fraction<E, E> b) {
 		return d.eq(d.times(a.num, b.den), d.times(b.num, a.den));
 	}
 

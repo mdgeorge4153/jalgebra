@@ -30,7 +30,7 @@ public class Z implements IntegralDomain<Integer> {
 	}
 
 	@Override
-	public boolean eq(Integer a, Integer b) {
+	public Boolean eq(Integer a, Integer b) {
 		return a.equals(b);
 	}
 
