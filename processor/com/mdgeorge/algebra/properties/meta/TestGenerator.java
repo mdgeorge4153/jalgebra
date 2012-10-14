@@ -79,7 +79,7 @@ public class TestGenerator
 			ExecutableElement argDecl  = e.getKey();
 			String            argValue = e.getValue().getValue().toString();
 			
-			if (argDecl.getReturnType().equals(util.eu.getTypeElement("java.lang.String")))
+			if (!util.returnsString(argDecl))
 			{
 				util.warning( "The MagicProperty " + propertyName + " " +
 				              "is malformed " +
@@ -137,7 +137,7 @@ public class TestGenerator
 					           );
 					continue;
 				}
-				if (values.size() > 0)
+				if (values.size() > 1)
 				{
 					util.error ( "The property @" + argValue + " has too many " +
 					             "'value' members."
@@ -148,14 +148,14 @@ public class TestGenerator
 				
 				ExecutableElement value = values.get(0);
 
-				if (!value.getReturnType().equals(util.eu.getTypeElement("java.lang.String")))
+				if (!util.returnsString(value))
 				{
 					util.error ( "The @" + argValue + " annotation " +
 					             "referred to by " + propertyName + " " +
 					             "must hava a String as it's 'value' parameter"
 					           , method
 					           );
-				}	
+				}
 				
 				//
 				// Get the referred-to annotation from the method. 
@@ -189,27 +189,33 @@ public class TestGenerator
 				// Get the "value" field of the referred-to annotation.
 				//
 				
-				methodName = refVal.getElementValues().get(value).toString();
+				methodName = refVal.getElementValues().get(value).getValue().toString();
 			}
 			else
 			{
 				methodName = argValue;
 			}
 			
-			List<ExecutableElement> methods = ElementFilter.methodsIn(util.findBySimpleName(clazz, argValue));
+			List<ExecutableElement> methods = ElementFilter.methodsIn(util.findBySimpleName(clazz, methodName));
 			
 			if (methods.isEmpty())
+			{
 				util.error ( "The MagicProperty " + propertyName + " " +
-				             "requires a method named " + argValue + " " +
+				             "requires a method named " + methodName + " " +
 				             "to be defined in the same class"
 				           , method
 				           );
+				continue;
+			}
 			if (methods.size() > 1)
+			{
 				util.error ( "The MagicProperty " + propertyName + " " +
-				             "refers to the method " + argValue + ", " +
+				             "refers to the method " + methodName + ", " +
 				             "which is multiply defined."
 				           , method
 				           );
+				continue;
+			}
 			
 			methodArgs.put(argDecl, methods.get(0));
 		}

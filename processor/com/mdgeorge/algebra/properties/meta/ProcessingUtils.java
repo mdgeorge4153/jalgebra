@@ -118,6 +118,15 @@ public class ProcessingUtils {
 		return result;
 	}
 	
+	/**
+	 * Determine whether the given method returns a String
+	 */
+	public boolean returnsString(ExecutableElement method) {
+		TypeElement stringElem = eu.getTypeElement("java.lang.String");
+		TypeMirror  stringType = stringElem.asType();
+		return method.getReturnType().equals(stringType);
+	}
+
 	////////////////////////////////////////////////////////////////////////////
 	// logging /////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
