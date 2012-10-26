@@ -1,4 +1,4 @@
-package com.mdgeorge.algebra;
+package com.mdgeorge.algebra.concept;
 
 import com.mdgeorge.algebra.properties.Inverse;
 

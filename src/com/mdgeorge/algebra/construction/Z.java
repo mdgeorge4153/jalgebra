@@ -1,5 +1,6 @@
-package com.mdgeorge.algebra;
+package com.mdgeorge.algebra.construction;
 
+import com.mdgeorge.algebra.concept.IntegralDomain;
 import com.mdgeorge.algebra.properties.meta.MagicCheck;
 
 @MagicCheck
