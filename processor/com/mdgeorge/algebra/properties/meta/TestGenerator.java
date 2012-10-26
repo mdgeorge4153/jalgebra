@@ -1,6 +1,5 @@
 package com.mdgeorge.algebra.properties.meta;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +17,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.util.ElementFilter;
-import javax.lang.model.util.Elements;
 
-import com.mdgeorge.util.NotImplementedException;
 
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.MagicCheck")
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
@@ -230,13 +227,11 @@ public class TestGenerator
 		
 		for (Map.Entry<ExecutableElement, ExecutableElement> e : methodArgs.entrySet())
 		{
-			/*
 			String note = "\t";
 			note += e.getKey() == null ? "this" : e.getKey().getSimpleName();
 			note += " --> ";
 			note += e.getValue() + " : " + e.getValue().getReturnType();
-			util.note ( note );
-			*/
+			// util.note ( note );
 		}
 	}
 	
