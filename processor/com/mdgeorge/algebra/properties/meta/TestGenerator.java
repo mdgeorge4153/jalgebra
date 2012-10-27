@@ -20,7 +20,7 @@ import javax.lang.model.util.ElementFilter;
 
 
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.MagicCheck")
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class TestGenerator
      extends AbstractProcessor
 {

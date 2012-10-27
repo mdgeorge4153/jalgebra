@@ -53,6 +53,7 @@ public abstract class Extension< E
 		 * @throws IllegalArgumentException
 		 *         if the number of coefficients is not S.dimension().
 		 */
+		@SafeVarargs
 		public Element (E... coeffs) throws IllegalArgumentException {
 			if (coeffs.length != s.dimension())
 				throw new IllegalArgumentException ( "An element of " +

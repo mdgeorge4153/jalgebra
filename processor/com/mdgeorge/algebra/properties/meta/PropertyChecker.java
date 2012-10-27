@@ -25,7 +25,7 @@ import javax.lang.model.util.ElementFilter;
  *
  */
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.MagicProperty")
-@SupportedSourceVersion(SourceVersion.RELEASE_6)
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class PropertyChecker
      extends AbstractProcessor
 {
