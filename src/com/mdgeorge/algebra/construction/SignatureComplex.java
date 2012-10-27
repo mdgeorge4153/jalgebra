@@ -6,7 +6,7 @@ public final class SignatureComplex<E, R extends Ring<E>>
         implements Extension.Signature<E>
 {
 	private final R r;
-	
+
 	public SignatureComplex(R r) {
 		this.r = r;
 	}

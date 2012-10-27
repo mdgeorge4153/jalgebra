@@ -5,18 +5,17 @@ import java.util.List;
 
 import com.mdgeorge.algebra.concept.Algebra;
 import com.mdgeorge.algebra.concept.Ring;
+import com.mdgeorge.algebra.concept.RingHom;
 import com.mdgeorge.algebra.properties.meta.MagicCheck;
-import com.mdgeorge.util.NotImplementedException;
 import com.mdgeorge.util.Utils;
 
 @MagicCheck
-public class Extension< E
-                      , R extends Ring<E>
-                      , S extends Extension.Signature<E>
-                      >
-  implements Algebra<Extension<E,R,S>.Element, E, R>
+public abstract class Extension< E
+                               , R extends Ring<E>
+                               , S extends Extension.Signature<E>
+                               >
+           implements Algebra<Extension<E,R,S>.Element, E, R>
 {
-	
 	public interface Signature<E> {
 		/**
 		 * The number of generators of the extension as a module over R.
@@ -94,12 +93,24 @@ public class Extension< E
 		}
 	}
 
+	public final class NaturalHom
+	        implements RingHom<E, R, Element, Extension<E,R,S>>
+	{
+		public  R                domain()   { return r; }
+		public  Extension<E,R,S> codomain() { return Extension.this; }
+		public  Element ap (E e) { return smult(e,one()); }
+	}
+	
+	public final NaturalHom INJ = new NaturalHom();
+	
 	private final S   s;
 	private final R   r;
 	private final int n;
 
-	public Extension() {
-		throw new NotImplementedException("Extension constructor");
+	protected Extension(S s, R r) {
+		this.s = s;
+		this.r = r;
+		this.n = s.dimension();
 	}
 
 	@Override
@@ -166,8 +177,9 @@ public class Extension< E
 		return new Element(result);
 	}
 	
+	@Deprecated
 	public Element inj(E e) {
-		return smult(e, one());
+		return INJ.ap(e);
 	}
 
 	/**

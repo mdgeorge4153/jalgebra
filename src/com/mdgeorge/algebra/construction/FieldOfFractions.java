@@ -6,8 +6,8 @@ import com.mdgeorge.algebra.concept.RingHom;
 import com.mdgeorge.algebra.properties.meta.MagicCheck;
 
 @MagicCheck
-public class FieldOfFractions<E, D extends IntegralDomain<E>>
-  implements Field<FieldOfFractions<E,D>.Element>
+public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
+           implements Field<FieldOfFractions<E,D>.Element>
 {
 	private final D d;
 	
@@ -17,7 +17,7 @@ public class FieldOfFractions<E, D extends IntegralDomain<E>>
 			super(num, den, d);
 		}
 	}
-	
+
 	@MagicCheck
 	public final class NaturalHom
 	        implements RingHom<E, D, Element, FieldOfFractions<E,D>>
@@ -29,7 +29,7 @@ public class FieldOfFractions<E, D extends IntegralDomain<E>>
 
 	public NaturalHom INJ = new NaturalHom();
 	
-	public FieldOfFractions(D d) {
+	protected FieldOfFractions(D d) {
 		this.d = d;
 	}
 
