@@ -5,7 +5,6 @@ import com.mdgeorge.algebra.concept.IntegralDomain;
 import com.mdgeorge.algebra.concept.RingHom;
 import com.mdgeorge.algebra.properties.meta.MagicCheck;
 
-@MagicCheck
 public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
            implements Field<FieldOfFractions<E,D>.Element>
 {

@@ -1,6 +1,7 @@
 package com.mdgeorge.algebra.construction;
 
 import com.mdgeorge.algebra.concept.Ring;
+import com.mdgeorge.algebra.properties.meta.OpUnary;
 
 public final class SignatureRoot6<E, R extends Ring<E>>
         implements Extension.Signature<E>
@@ -13,12 +14,13 @@ public final class SignatureRoot6<E, R extends Ring<E>>
 
 	@SuppressWarnings("unchecked")
 	public final E[][][] coefficients() {
-		E e0 = Utils.intInRing(0, r);
-		E e1 = Utils.intInRing(1, r);
-		E e2 = Utils.intInRing(2, r);
-		E e3 = Utils.intInRing(3, r);
-		E e6 = Utils.intInRing(6, r);
-		E e9 = Utils.intInRing(9, r);
+		OpUnary<Integer,E> inj = Z.into(r);
+		E e0 = inj.ap(0);
+		E e1 = inj.ap(1);
+		E e2 = inj.ap(2);
+		E e3 = inj.ap(3);
+		E e6 = inj.ap(6);
+		E e9 = inj.ap(9);
 
 		return (E[][][]) new Object[][][]
 			{

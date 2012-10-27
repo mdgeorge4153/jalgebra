@@ -6,10 +6,8 @@ import java.util.List;
 import com.mdgeorge.algebra.concept.Algebra;
 import com.mdgeorge.algebra.concept.Ring;
 import com.mdgeorge.algebra.concept.RingHom;
-import com.mdgeorge.algebra.properties.meta.MagicCheck;
 import com.mdgeorge.util.Utils;
 
-@MagicCheck
 public abstract class Extension< E
                                , R extends Ring<E>
                                , S extends Extension.Signature<E>
