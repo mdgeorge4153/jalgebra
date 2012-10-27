@@ -81,12 +81,27 @@ public abstract class Extension< E
 			List<String> result = new ArrayList<String> (s.dimension());
 			for (int i = 0; i < n; i++)
 			{
-				if (!r.eq(coeffs[i], r.zero()))
-					result.add(coeffs[i].toString() + "⋅" + s.generatorName(i));
+				if (r.eq(coeffs[i], r.zero()))
+					continue;
+				
+				boolean coefficientIsOne = r.eq(coeffs[i], r.one());
+				boolean   generatorIsOne = s.generatorName(i) == null;
+				
+				String term;
+				if (!coefficientIsOne && !generatorIsOne)
+					term = coeffs[i].toString() + "⋅" + s.generatorName(i);
+				else if (coefficientIsOne && !generatorIsOne)
+					term = s.generatorName(i);
+				else
+					term = coeffs[i].toString();
+
+				result.add(term);
 			}
 			
 			if (result.isEmpty())
 				return r.zero().toString();
+			else if (result.size() == 1)
+				return result.get(0);
 			else
 				return "(" + Utils.join(result, "+") + ")";
 		}

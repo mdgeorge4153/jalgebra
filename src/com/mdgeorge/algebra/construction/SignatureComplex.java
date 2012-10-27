@@ -43,7 +43,7 @@ public final class SignatureComplex<E, R extends Ring<E>>
 	@Override
 	public String generatorName(int i) throws IllegalArgumentException {
 		switch(i) {
-		case 0: return "1";
+		case 0: return null;
 		case 1: return "i";
 		default: throw new IllegalArgumentException();
 		}

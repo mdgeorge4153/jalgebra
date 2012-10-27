@@ -64,7 +64,7 @@ public final class SignatureRoot6<E, R extends Ring<E>>
 	@Override
 	public String generatorName(int i) throws IllegalArgumentException {
 		switch(i) {
-		case 0: return "√1";
+		case 0: return null;
 		case 1: return "√2";
 		case 2: return "√3";
 		case 3: return "√6";
