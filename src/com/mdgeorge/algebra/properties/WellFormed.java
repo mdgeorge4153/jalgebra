@@ -6,7 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
 import com.mdgeorge.algebra.properties.meta.MethodPair;
 import com.mdgeorge.algebra.properties.meta.OpNullary;
