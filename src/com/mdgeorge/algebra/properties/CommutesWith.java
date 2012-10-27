@@ -1,5 +1,12 @@
 package com.mdgeorge.algebra.properties;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
 import com.mdgeorge.algebra.properties.meta.MethodPair;
 import com.mdgeorge.algebra.properties.meta.OpBinary;
@@ -7,6 +14,9 @@ import com.mdgeorge.algebra.properties.meta.OpNullary;
 import com.mdgeorge.algebra.properties.meta.OpTernary;
 import com.mdgeorge.algebra.properties.meta.OpUnary;
 
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Documented
 public @interface CommutesWith {
 	@MethodPair String value();
 	@MethodName String eq()       default "eq";
