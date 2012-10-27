@@ -10,10 +10,27 @@ public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
 {
 	private final D d;
 	
-	public final class Element extends Fraction<E,E,D>
+	public final class Element
 	{
-		public Element(E num, E den) throws IllegalArgumentException {
-			super(num, den, d);
+		public  final E num;
+		public  final E den;
+
+		/** @throws IllegalArgumentException If den is zero in r. */
+		public Element(E num, E den) throws IllegalArgumentException
+		{
+			this.num = num;
+			this.den = den;
+			
+			if (d.eq(den, d.zero()))
+				throw new IllegalArgumentException("Division by zero");
+		}
+
+		/** A string representation of this suitable for display. */
+		public String toString() {
+			if (d.eq(den, d.one()))
+				return num.toString();
+			else
+				return "(" + num.toString() + " / " + den.toString() + ")";
 		}
 	}
 
@@ -21,7 +38,7 @@ public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
 	public final class NaturalHom
 	        implements RingHom<E, D, Element, FieldOfFractions<E,D>>
 	{
-		public D domain() { return d; }
+		public D domain()                       { return d; }
 		public FieldOfFractions<E,D> codomain() { return FieldOfFractions.this; }
 		public Element ap(E e) { return new Element(e, d.one()); }
 	}
@@ -76,3 +93,7 @@ public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
 		return new Element(a.den, a.num);
 	}
 }
+
+/*
+** vim: ts=4 sw=4 cindent cino=\:0
+*/
