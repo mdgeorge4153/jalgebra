@@ -4,10 +4,10 @@ import com.mdgeorge.algebra.properties.Bilinear;
 
 /**
  * An algebra over a ring R is an R-module with an R-bilinear multiplication
- * operation.  In this library, 
+ * operation.  This operation induces a ring structure on the algebra.
+ * In this library, all algebras are associative and unital. 
  * 
- * 
- * @see http://en.wikipedia.org/wiki/Associative_algebra
+ * @see <a href="http://en.wikipedia.org/wiki/Associative_algebra">Associative Algebra on Wikipedia</a>
  * @author mdgeorge
  */
 public interface Algebra<E, S, R extends Ring<S>>

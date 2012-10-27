@@ -12,6 +12,9 @@ import com.mdgeorge.algebra.properties.*;
  * Methods in Set and its subinterfaces define operations over the kinds of sets
  * they represent; they should contain annotations defining the properties which
  * those operations must satisfy.
+ *
+ * @see <a href="http://en.wikipedia.org/wiki/Set_%28mathematics%29">Set on Wikipedia</a>
+ * @author mdgeorge
  */
 public interface Set<E> {
 	@Reflexive @Transitive @Symmetric
