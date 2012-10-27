@@ -5,6 +5,13 @@ import com.mdgeorge.algebra.concept.IntegralDomain;
 public final class Rot15
            extends FieldOfFractions<Rot15.Cos15e.Element, Rot15.Cos15e>
 {
+	public static void main(String[] args)
+	{
+		System.out.println("Cos 30: " + Cos15.instance.COS30);
+		System.out.println("Cos 45: " + Cos15.instance.COS45);
+		System.out.println("Rot 15: " + instance.ROT15);
+	}
+	
 	public final static Rot15 instance = new Rot15();
 
 	private Cos15e c15e = Cos15e.instance;

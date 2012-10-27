@@ -50,11 +50,10 @@ public class Z implements IntegralDomain<Integer> {
 		public R codomain() { return this.r;   }
 
 		public E ap(Integer n) {
-			E result = r.zero();
-			
-			E twoToTheI = r.one();
-			for (int i = 0; n >> i == 0; i++, twoToTheI = r.plus(twoToTheI, twoToTheI))
-				if ((i & 0x1) == 1)
+			E result   = r.zero();
+
+			for (E twoToTheI = r.one(); n != 0; n >>= 1, twoToTheI = r.plus(twoToTheI, twoToTheI))
+				if ((n & 1) == 1)
 					result = r.plus(result, twoToTheI);
 
 			return result;
