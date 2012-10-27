@@ -1,6 +1,6 @@
 package com.mdgeorge.algebra.concept;
 
-import com.mdgeorge.algebra.properties.CommutesWith;
+import com.mdgeorge.algebra.properties.WellFormed;
 import com.mdgeorge.algebra.properties.meta.OpUnary;
 
 public interface SetHom < DE, D extends Set<DE>
@@ -11,6 +11,6 @@ public interface SetHom < DE, D extends Set<DE>
 	D domain();
 	R codomain();
 	
-	@CommutesWith("Set.eq")
+	@WellFormed
 	RE ap (DE e);
 }
