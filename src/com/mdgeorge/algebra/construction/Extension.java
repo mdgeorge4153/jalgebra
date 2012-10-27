@@ -178,11 +178,6 @@ public abstract class Extension< E
 		return new Element(result);
 	}
 	
-	@Deprecated
-	public Element inj(E e) {
-		return INJ.ap(e);
-	}
-
 	/**
 	 * A string representation of this object, suitable for debugging.
 	 */

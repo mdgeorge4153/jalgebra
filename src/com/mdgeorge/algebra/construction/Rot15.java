@@ -8,8 +8,8 @@ public final class Rot15
 	public final static Rot15 instance = new Rot15();
 
 	private Cos15e c15e = Cos15e.instance;
-	public final Rot15.Element ROT45 = inj(c15e.ROT45);
-	public final Rot15.Element ROT30 = inj(c15e.ROT30);
+	public final Rot15.Element ROT45 = INJ.ap(c15e.ROT45);
+	public final Rot15.Element ROT30 = INJ.ap(c15e.ROT30);
 	public final Rot15.Element ROT15 = times(ROT45, inv(ROT30));
 	
 	private Rot15() {
@@ -42,11 +42,11 @@ public final class Rot15
 		private Cos15() { super(Root6.instance); }
 
 		private final Root6 r6 = Root6.instance;
-		public  final Cos15.Element HALF  = inv(inj(r6.inj(2)));
-		public  final Cos15.Element COS45 = times(inj(r6.SQRT2), HALF);
-		public  final Cos15.Element SIN45 = times(inj(r6.SQRT2), HALF);
-		public  final Cos15.Element COS30 = times(inj(r6.SQRT3), HALF);
-		public  final Cos15.Element SIN30 = times(inj(r6.SQRT1), HALF);
+		public  final Cos15.Element HALF  = inv(INJ.ap(r6.INJ.ap(2)));
+		public  final Cos15.Element COS45 = times(INJ.ap(r6.SQRT2), HALF);
+		public  final Cos15.Element SIN45 = times(INJ.ap(r6.SQRT2), HALF);
+		public  final Cos15.Element COS30 = times(INJ.ap(r6.SQRT3), HALF);
+		public  final Cos15.Element SIN30 = times(INJ.ap(r6.SQRT1), HALF);
 		
 	}
 	

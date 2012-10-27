@@ -33,11 +33,6 @@ public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
 		this.d = d;
 	}
 
-	@Deprecated
-	public Element inj(E e) {
-		return INJ.ap(e);
-	}
-	
 	@Override
 	public Element times(Element a, Element b) {
 		return new Element ( d.times(a.num, b.num)
