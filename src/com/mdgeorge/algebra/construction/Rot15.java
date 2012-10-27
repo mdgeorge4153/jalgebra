@@ -1,6 +1,8 @@
 package com.mdgeorge.algebra.construction;
 
 import com.mdgeorge.algebra.concept.IntegralDomain;
+import com.mdgeorge.algebra.concept.Ring;
+import com.mdgeorge.algebra.properties.meta.OpUnary;
 
 public final class Rot15
            extends FieldOfFractions<Rot15.Cos15e.Element, Rot15.Cos15e>
@@ -23,6 +25,80 @@ public final class Rot15
 		super(Cos15e.instance);
 	}
 
+	/*
+	** Z[sqrt2, sqrt3] *********************************************************
+	**/
+	
+	public final static class SignatureRoot6<E, R extends Ring<E>>
+		implements Extension.Signature<E>
+	{
+		private final R r;
+		
+		public SignatureRoot6(R r) {
+			this.r = r;
+		}
+
+		@SuppressWarnings("unchecked")
+		public final E[][][] coefficients() {
+			OpUnary<Integer,E> inj = Z.into(r);
+			E e0 = inj.ap(0);
+			E e1 = inj.ap(1);
+			E e2 = inj.ap(2);
+			E e3 = inj.ap(3);
+			E e6 = inj.ap(6);
+			E e9 = inj.ap(9);
+
+			return (E[][][]) new Object[][][]
+				{
+					{ { e1 , e0 , e0 , e0 } // √1 * √1
+					, { e0 , e1 , e0 , e0 } // √1 * √2
+					, { e0 , e0 , e1 , e0 } // √1 * √3
+					, { e0 , e0 , e0 , e1 } // √1 * √6
+					},
+
+					{ { e0 , e1 , e0 , e0 } // √2 * √1 
+					, { e2 , e0 , e0 , e0 } // √2 * √2
+					, { e0 , e0 , e0 , e1 } // √2 * √3
+					, { e0 , e0 , e2 , e0 } // √2 * √6
+					},
+
+					{ { e0 , e0 , e1 , e0 } // √3 * √1
+					, { e0 , e0 , e0 , e1 } // √3 * √2
+					, { e3 , e0 , e0 , e0 } // √3 * √3
+					, { e0 , e3 , e0 , e0 } // √3 * √6
+					},
+
+					{ { e0 , e0 , e0 , e1 } // √6 * √1
+					, { e0 , e0 , e2 , e0 } // √6 * √2
+					, { e0 , e9 , e0 , e0 } // √6 * √3
+					, { e6 , e0 , e0 , e0 } // √6 * √6
+					},
+				};
+		}
+		
+		@Override
+		public int dimension() {
+			return 4;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public E[] one() {
+			return (E[]) new Object[] {r.one(), r.zero(), r.zero(), r.zero()};
+		}
+
+		@Override
+		public String generatorName(int i) throws IllegalArgumentException {
+			switch(i) {
+			case 0: return null;
+			case 1: return "√2";
+			case 2: return "√3";
+			case 3: return "√6";
+			default: throw new IllegalArgumentException();
+			}
+		}
+	}
+
 	public static final class Root6
                           extends Extension < Integer
                                             , Z
@@ -40,7 +116,10 @@ public final class Rot15
 		public final Root6.Element SQRT3 = new Element(0,0,1,0);
 		public final Root6.Element SQRT6 = new Element(0,0,0,1);
 	}
-	
+
+	/*
+	** Field of fractions of Root6 *********************************************
+	*/
 	
 	public static final class Cos15
 	                  extends FieldOfFractions<Root6.Element, Root6>
@@ -57,6 +136,58 @@ public final class Rot15
 		
 	}
 	
+	/*
+	** Cos15[i] ****************************************************************
+	*/
+
+	public final static class SignatureComplex<E, R extends Ring<E>>
+	        implements Extension.Signature<E>
+	{
+		private final R r;
+
+		public SignatureComplex(R r) {
+			this.r = r;
+		}
+
+		@SuppressWarnings("unchecked")
+		public final E[][][] coefficients() {
+			E e0  = r.zero();
+			E e1  = r.one();
+			E n1  = r.neg(e1);
+
+			return (E[][][]) new Object[][][]
+				{
+					{ { e1 , e0 } // 1 * 1
+					, { e0 , e1 } // 1 * i
+					},
+
+					{ { e0 , e1 } // i * 1 
+					, { n1 , e0 } // i * i
+					},
+				};
+		}
+		
+		@Override
+		public int dimension() {
+			return 2;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public E[] one() {
+			return (E[]) new Object[] {r.one(), r.zero()};
+		}
+
+		@Override
+		public String generatorName(int i) throws IllegalArgumentException {
+			switch(i) {
+			case 0: return null;
+			case 1: return "i";
+			default: throw new IllegalArgumentException();
+			}
+		}
+	}
+
 	public static final class Cos15e
 	                  extends Extension < Cos15.Element
 	                                    , Cos15
