@@ -14,8 +14,10 @@
 	<target name="processor-jar" depends="processor-classes">
 		<jar jarfile="${processor.jar}">
 			<fileset dir="${processor.classdir}" />
-			<service type="javax.annotation.processing.Processor" provider="com.mdgeorge.algebra.properties.meta.PropertyChecker" />
-			<service type="javax.annotation.processing.Processor" provider="com.mdgeorge.algebra.properties.meta.TestGenerator"   />
+			<service type="javax.annotation.processing.Processor">
+				<provider classname="com.mdgeorge.algebra.properties.meta.PropertyChecker" />
+				<provider classname="com.mdgeorge.algebra.properties.meta.TestGenerator" />
+			</service>
 		</jar>
 	</target>
 
