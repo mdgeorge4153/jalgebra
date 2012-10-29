@@ -3,10 +3,10 @@ package com.mdgeorge.algebra.concept;
 import com.mdgeorge.algebra.properties.CommutesWith;
 
 public interface RingHom < DE, D extends Ring<DE>
-                         , RE, R extends Ring<RE>
+                         , CE, C extends Ring<CE>
                          >
-         extends GroupHom<DE, D, RE, R>
+         extends GroupHom<DE, D, CE, C>
 {
 	@CommutesWith("Ring.times")
-	RE ap (DE e);
+	CE ap (DE e);
 }

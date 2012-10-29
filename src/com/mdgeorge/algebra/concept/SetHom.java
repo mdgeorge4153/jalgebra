@@ -1,6 +1,6 @@
 package com.mdgeorge.algebra.concept;
 
-import com.mdgeorge.algebra.properties.WellFormed;
+import com.mdgeorge.algebra.properties.Preserves;
 import com.mdgeorge.algebra.properties.meta.OpUnary;
 
 /**
@@ -11,13 +11,13 @@ import com.mdgeorge.algebra.properties.meta.OpUnary;
  * @author mdgeorge
  */
 public interface SetHom < DE, D extends Set<DE>
-                        , RE, R extends Set<RE>
+                        , CE, C extends Set<CE>
                         >
-         extends OpUnary<DE, RE>
+         extends OpUnary<DE, CE>
 {
 	D domain();
-	R codomain();
+	C codomain();
 	
-	@WellFormed
-	RE ap (DE e);
+	@Preserves("Set.eq")
+	CE ap (DE e);
 }

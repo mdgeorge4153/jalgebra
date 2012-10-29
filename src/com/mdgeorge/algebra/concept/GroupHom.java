@@ -11,10 +11,10 @@ import com.mdgeorge.algebra.properties.CommutesWith;
  * @author mdgeorge
  */
 public interface GroupHom < DE, D extends Group<DE>
-                          , RE, R extends Group<RE>
+                          , CE, C extends Group<CE>
                           >
-         extends SetHom<DE, D, RE, R>
+         extends SetHom<DE, D, CE, C>
 {
 	@Override @CommutesWith("Group.plus")
-	RE ap (DE e);
+	CE ap (DE e);
 }

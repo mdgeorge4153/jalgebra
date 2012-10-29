@@ -6,8 +6,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
-import com.mdgeorge.algebra.properties.meta.MethodPair;
+import com.mdgeorge.algebra.properties.meta.ExtMethod;
+import com.mdgeorge.algebra.properties.meta.MethodRef;
 import com.mdgeorge.algebra.properties.meta.OpNullary;
 import com.mdgeorge.algebra.properties.meta.OpTernary;
 import com.mdgeorge.algebra.properties.meta.OpUnary;
@@ -15,13 +17,15 @@ import com.mdgeorge.algebra.properties.meta.OpUnary;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
-public @interface WellFormed {
-	@MethodPair String eq()       default "Set.eq";
+@MagicProperty
+public @interface Preserves {
+	@ExtMethod  String value();
+	@MethodRef  String codEq()    default "com.mdgeorge.algebra.properties.Preserves";
 	@MethodName String domain()   default "domain";
 	@MethodName String codomain() default "codomain";
 	
 	public static class Definition {
-		public static <DE, D, CE, C>
+		public static <DE, D, CE, C, R>
 		boolean check ( OpUnary<DE, CE> m
 		              , OpTernary<D, DE, DE, Boolean> domEq
 		              , OpTernary<C, CE, CE, Boolean> codEq
