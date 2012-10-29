@@ -29,7 +29,10 @@
 			destdir="${algebra.classdir}"
 			includeantruntime="false"
 			classpath="${processor.jar}"
-		/>
+		>
+			<compilerarg value="-processorpath" />
+			<compilerarg path="${processor.jar}" />
+		</javac>
 	</target>
 
 </project>

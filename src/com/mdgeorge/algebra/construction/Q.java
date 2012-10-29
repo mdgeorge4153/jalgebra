@@ -1,6 +1,6 @@
 package com.mdgeorge.algebra.construction;
 
-import com.mdgeorge.algebra.properties.meta.MagicCheck;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicCheck;
 
 @MagicCheck
 public final class Q

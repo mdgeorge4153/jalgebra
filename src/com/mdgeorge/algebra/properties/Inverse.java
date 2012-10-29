@@ -1,11 +1,11 @@
 package com.mdgeorge.algebra.properties;
 
-import com.mdgeorge.algebra.properties.meta.OpBinary;
-import com.mdgeorge.algebra.properties.meta.MagicProperty;
-import com.mdgeorge.algebra.properties.meta.MethodName;
-import com.mdgeorge.algebra.properties.meta.MethodRef;
-import com.mdgeorge.algebra.properties.meta.OpNullary;
-import com.mdgeorge.algebra.properties.meta.OpUnary;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodRef;
+import com.mdgeorge.util.OpBinary;
+import com.mdgeorge.util.OpNullary;
+import com.mdgeorge.util.OpUnary;
 
 @MagicProperty
 public @interface Inverse {

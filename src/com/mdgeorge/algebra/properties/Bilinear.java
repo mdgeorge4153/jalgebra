@@ -1,7 +1,7 @@
 package com.mdgeorge.algebra.properties;
 
-import com.mdgeorge.algebra.properties.meta.MethodName;
-import com.mdgeorge.algebra.properties.meta.OpBinary;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
+import com.mdgeorge.util.OpBinary;
 
 public @interface Bilinear {
 	@MethodName String smult() default "smult";

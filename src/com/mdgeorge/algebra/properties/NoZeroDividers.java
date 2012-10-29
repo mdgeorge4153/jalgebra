@@ -1,8 +1,8 @@
 package com.mdgeorge.algebra.properties;
 
-import com.mdgeorge.algebra.properties.meta.OpBinary;
-import com.mdgeorge.algebra.properties.meta.MagicProperty;
-import com.mdgeorge.algebra.properties.meta.OpNullary;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
+import com.mdgeorge.util.OpBinary;
+import com.mdgeorge.util.OpNullary;
 
 @MagicProperty
 public @interface NoZeroDividers {

@@ -1,7 +1,7 @@
 package com.mdgeorge.algebra.concept;
 
 import com.mdgeorge.algebra.properties.Preserves;
-import com.mdgeorge.algebra.properties.meta.OpUnary;
+import com.mdgeorge.util.OpUnary;
 
 /**
  * A Set Hom is a funny name for a function: a map taking an element of a domain

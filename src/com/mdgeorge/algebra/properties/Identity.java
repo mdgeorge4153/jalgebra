@@ -2,10 +2,10 @@ package com.mdgeorge.algebra.properties;
 
 import java.lang.annotation.*;
 
-import com.mdgeorge.algebra.properties.meta.OpBinary;
-import com.mdgeorge.algebra.properties.meta.MagicProperty;
-import com.mdgeorge.algebra.properties.meta.MethodName;
-import com.mdgeorge.algebra.properties.meta.OpNullary;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
+import com.mdgeorge.util.OpBinary;
+import com.mdgeorge.util.OpNullary;
 
 /**
  * A function f : E → E → R with @Identity function g : E has the property that

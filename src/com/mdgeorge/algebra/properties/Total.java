@@ -1,6 +1,6 @@
 package com.mdgeorge.algebra.properties;
 
-import com.mdgeorge.algebra.properties.meta.OpBinary;
+import com.mdgeorge.util.OpBinary;
 
 public @interface Total {
 	public static class Definition {

@@ -2,8 +2,8 @@ package com.mdgeorge.algebra.properties;
 
 import java.lang.annotation.*;
 
-import com.mdgeorge.algebra.properties.meta.OpBinary;
-import com.mdgeorge.algebra.properties.meta.MagicProperty;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
+import com.mdgeorge.util.OpBinary;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

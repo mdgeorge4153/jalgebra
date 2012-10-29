@@ -2,7 +2,7 @@ package com.mdgeorge.algebra.construction;
 
 import com.mdgeorge.algebra.concept.IntegralDomain;
 import com.mdgeorge.algebra.concept.Ring;
-import com.mdgeorge.algebra.properties.meta.OpUnary;
+import com.mdgeorge.util.OpUnary;
 
 public final class Rot15
            extends FieldOfFractions<Rot15.Cos15e.Element, Rot15.Cos15e>

@@ -3,7 +3,7 @@ package com.mdgeorge.algebra.construction;
 import com.mdgeorge.algebra.concept.Field;
 import com.mdgeorge.algebra.concept.IntegralDomain;
 import com.mdgeorge.algebra.concept.RingHom;
-import com.mdgeorge.algebra.properties.meta.MagicCheck;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicCheck;
 
 public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
            implements Field<FieldOfFractions<E,D>.Element>

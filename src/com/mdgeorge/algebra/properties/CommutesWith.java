@@ -6,14 +6,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.mdgeorge.algebra.properties.meta.MagicProperty;
-import com.mdgeorge.algebra.properties.meta.MethodName;
-import com.mdgeorge.algebra.properties.meta.MethodExt;
-import com.mdgeorge.algebra.properties.meta.MethodDup;
-import com.mdgeorge.algebra.properties.meta.OpBinary;
-import com.mdgeorge.algebra.properties.meta.OpNullary;
-import com.mdgeorge.algebra.properties.meta.OpTernary;
-import com.mdgeorge.algebra.properties.meta.OpUnary;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodDup;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodExt;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
+import com.mdgeorge.util.OpBinary;
+import com.mdgeorge.util.OpNullary;
+import com.mdgeorge.util.OpTernary;
+import com.mdgeorge.util.OpUnary;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

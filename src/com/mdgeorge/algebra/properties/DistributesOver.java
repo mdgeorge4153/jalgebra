@@ -2,9 +2,9 @@ package com.mdgeorge.algebra.properties;
 
 import java.lang.annotation.*;
 
-import com.mdgeorge.algebra.properties.meta.OpBinary;
-import com.mdgeorge.algebra.properties.meta.MagicProperty;
-import com.mdgeorge.algebra.properties.meta.MethodName;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
+import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
+import com.mdgeorge.util.OpBinary;
 
 /**
  * A function f : S → E → E that @DistributesOver a function g : E → E → E has

@@ -3,7 +3,7 @@ package com.mdgeorge.algebra.construction;
 import com.mdgeorge.algebra.concept.IntegralDomain;
 import com.mdgeorge.algebra.concept.Ring;
 import com.mdgeorge.algebra.concept.RingHom;
-import com.mdgeorge.algebra.properties.meta.MagicCheck;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicCheck;
 
 @MagicCheck
 public class Z implements IntegralDomain<Integer> {
