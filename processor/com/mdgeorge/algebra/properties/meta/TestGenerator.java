@@ -95,7 +95,7 @@ public class TestGenerator
 			{
 				util.warning ( "The MagicProperty " + propertyName + " " +
 				               "is malformed " +
-				               "(" + argValue + " not annotated properly)."
+				               "(" + argDecl + " not annotated properly)."
 				             , method
 				             );
 				continue;

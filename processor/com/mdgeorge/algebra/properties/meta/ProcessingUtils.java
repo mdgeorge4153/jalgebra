@@ -11,6 +11,7 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
@@ -119,6 +120,10 @@ public class ProcessingUtils {
 		return result;
 	}
 	
+	////////////////////////////////////////////////////////////////////////////
+	// Peculiarities of this package ///////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Determine whether the given method returns a String
 	 */
@@ -127,7 +132,69 @@ public class ProcessingUtils {
 		TypeMirror  stringType = stringElem.asType();
 		return method.getReturnType().equals(stringType);
 	}
+	
+	/**
+	 * Return a the unique method named 'ap' from the given type, or null if no
+	 * such method exists.
+	 */
+	public ExecutableElement getAp(TypeMirror enclosingType)
+	{
+		if (enclosingType.getKind() != TypeKind.DECLARED)
+			return null;
+		
+		Element type = ((DeclaredType) enclosingType).asElement();
+		
+		if (!(type instanceof TypeElement))
+			return null;
+		
+		List<Element> aps = findBySimpleName((TypeElement) type, "ap");
+		if (aps.size() != 1)
+			return null;
+		
+		Element ap = aps.get(0);
+		if (!(ap instanceof ExecutableElement))
+			return null;
+		
+		return (ExecutableElement) ap;
+	}
 
+	/**
+	 * Dispatch on the property value annotation type
+	 */
+	public void switchOn(ExecutableElement property, MethodRefVisitor visitor)
+		 throws BadPropertyException
+	{
+		if (property.getReturnType().equals(eu.getTypeElement("java.lang.String")))
+			throw new BadPropertyException( "@MagicProperty values must be Strings" );
+		
+		boolean isMethodName = property.getAnnotation(MethodName.class) != null;
+		boolean isMethodRef  = property.getAnnotation(MethodRef.class)  != null;
+		boolean isMethodExt  = property.getAnnotation(MethodExt.class)  != null;
+		boolean isMethodDup  = property.getAnnotation(MethodDup.class)  != null;
+
+		int annotationCount = (isMethodName ? 1 : 0)
+		                    + (isMethodRef  ? 1 : 0)
+		                    + (isMethodExt  ? 1 : 0)
+		                    + (isMethodDup  ? 1 : 0);
+
+		if (annotationCount != 1)
+			throw new BadPropertyException(
+					"@MagicProperty values must be annotated with " +
+			        "exactly of @MethodName, @MethodRef, @MethodDup or " +
+			        "@MethodExt."
+			      );
+		
+		if(isMethodName)
+			visitor.caseMethodName();
+		if(isMethodRef)
+			visitor.caseMethodRef();
+		if(isMethodDup)
+			visitor.caseMethodDup();
+		if(isMethodExt)
+			visitor.caseMethodExt();
+	}
+	
+	
 	////////////////////////////////////////////////////////////////////////////
 	// logging /////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////

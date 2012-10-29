@@ -16,7 +16,9 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 
 /**
@@ -76,8 +78,11 @@ public class PropertyChecker
 		//
 		// check annotation values
 		//
+		boolean cont = true; 
 		for (ExecutableElement value : ElementFilter.methodsIn(property.getEnclosedElements()))
-			checkAnnotationValue(property, value);
+			cont &= checkAnnotationValue(value);
+		if (!cont)
+			return;
 
 		//
 		// find and check Definition inner class
@@ -106,28 +111,23 @@ public class PropertyChecker
 	/**
 	 * Check that the annotation value has the appropriate type.
 	 */
-	private void checkAnnotationValue(TypeElement property, ExecutableElement value)
+	private boolean checkAnnotationValue(ExecutableElement value)
 	{
-		
-		if (value.getReturnType().equals(util.eu.getTypeElement("java.lang.String")))
-			util.error( "@MagicProperty values must be Strings", value);
-		
-		boolean isMethodName = value.getAnnotation(MethodName.class) != null;
-		boolean isMethodRef  = value.getAnnotation(MethodRef.class)  != null;
-
-		if (!isMethodName && !isMethodRef)
-			util.error ( "@MagicProperty values must be marked as either " +
-			             "@MethodName or @MethodRef"
-			           , value
-			           );
-		
-		if (isMethodName && isMethodRef)
-			util.error ( "@MagicProperty values cannot be marked both " +
-			             "@MethodName and @MethodRef"
-			           , value
-			           );
+		try {
+			util.switchOn(value, new MethodRefVisitor()
+				{
+					public void caseMethodDup()  { }
+					public void caseMethodExt()  { }
+					public void caseMethodName() { }
+					public void caseMethodRef()  { }
+				});
+			return true;
+		} catch(BadPropertyException e) {
+			util.error( e.getMessage(), value );
+			return false;
+		}
 	}
-	
+
 	/**
 	 * Check that the given definition is suitable for the given property.
 	 */
@@ -222,7 +222,15 @@ public class PropertyChecker
 			return;
 		}
 		
-		VariableElement methodArg = args.next();
+		VariableElement   methodArg     = args.next();
+		ExecutableElement methodArgAp   = util.getAp(methodArg.asType());
+		
+		if (methodArgAp == null)
+			util.error ( "The type of the first argument of Definition.check " +
+			             "must have a method named 'ap'."
+			           , methodArg
+			           );
+		
 		// TODO: typecheck methodArg
 		
 		//
@@ -232,21 +240,27 @@ public class PropertyChecker
 		{
 			if (!args.hasNext()) {
 				util.error ( "@MagicProperty 'check' method must have an " +
-						"argument corresponding to the " +
-						e.getSimpleName() + " property."
-						, check
-						);
+				             "argument corresponding to the " +
+				             e.getSimpleName() + " property."
+				           , check
+				           );
 				return;
 			}
-			else
-				// TODO: check argument type
-				args.next();
+			else {
+				VariableElement   arg   = args.next();
+				ExecutableElement argAp = util.getAp(arg.asType());
+				if (argAp == null)
+					util.error ( "The argument corresponding to the " +
+					             e.getSimpleName() + " property must have an " +
+					             "'ap' method."
+					           , arg
+					           );
+			}
 		}
-			
+		
 		//
 		// final parameters are the generated arguments to the test
 		//
-		
-		// TODO: checking?
 	}
+	
 }
