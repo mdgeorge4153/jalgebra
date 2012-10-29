@@ -18,6 +18,6 @@ public interface SetHom < DE, D extends Set<DE>
 	D domain();
 	C codomain();
 	
-	@Preserves("Set.eq")
+	@Preserves("com.mdgeorge.algebra.concept.Set.eq")
 	CE ap (DE e);
 }

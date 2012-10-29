@@ -7,6 +7,6 @@ public interface PreorderHom < DE, D extends Preorder<DE>
                                  >
          extends SetHom<DE, D, CE, C>
 {
-	@Preserves("Preorder.leq")
+	@Preserves("com.mdgeorge.algebra.concept.Preorder.leq")
 	CE ap (DE e);
 }

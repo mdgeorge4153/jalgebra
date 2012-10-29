@@ -1,5 +1,7 @@
 package com.mdgeorge.algebra.properties.meta;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -8,6 +10,7 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -51,7 +54,7 @@ public class TestGenerator
 		for (ExecutableElement m : ElementFilter.methodsIn(util.eu.getAllMembers(clazz)))
 			for (AnnotationMirror a : util.findAllAnnotations(m))
 				if (isMagic(a))
-						checkMethodProperty(clazz, m, a);
+					checkMethodProperty(clazz, m, a);
 	}
 	
 	private void checkMethodProperty ( TypeElement clazz
@@ -59,139 +62,220 @@ public class TestGenerator
 	                                 , AnnotationMirror a
 	                                 )
 	{
+		PropertyDefn propDef = getDefinition(a);
+		if (propDef == null)
+			//
+			// definition is malformed somehow.  User will get an error, so just
+			// skip checking.
+			//
+			return;
 		
-		/*
-		switch(property.type) {
-		if (property.)
-			{
-				//
-				// get the referred-to annotation type
-				//
-				
-				TypeElement refType = util.eu.getTypeElement(argValue);
-				
-				if (refType == null)
-				{
-					util.error( "The MagicProperty " + propertyName + " " +
-					            "refers to the non-existent property "    +
-					            argValue + "."
-					          , method
-					          );
-					continue;
-				}
-				
-				//
-				// Make sure the referred-to annotation has a "value" field
-				//
-				List<ExecutableElement> values = ElementFilter.methodsIn(util.findBySimpleName(refType, "value"));
-				
-				if (values.isEmpty())
-				{
-					util.error ( "The property @" + argValue + " " +
-					             "referred to by " + propertyName + " " +
-					             "must have a 'value' member."
-					           , method
-					           );
-					continue;
-				}
-				if (values.size() > 1)
-				{
-					util.error ( "The property @" + argValue + " has too many " +
-					             "'value' members."
-					           , method
-					           );
-					continue;
-				}
-				
-				ExecutableElement value = values.get(0);
 
-				if (!util.returnsString(value))
-				{
-					util.error ( "The @" + argValue + " annotation " +
-					             "referred to by " + propertyName + " " +
-					             "must hava a String as it's 'value' parameter"
-					           , method
-					           );
-				}
-				
-				//
-				// Get the referred-to annotation from the method. 
-				//
-				
-				Set<AnnotationMirror> annots = util.findAllAnnotationsOf(method, refType);
-				
-				if (annots.isEmpty())
-				{
-					util.error( "The MagicProperty " + propertyName + " " +
-					            "requires the method to also have an " +
-					            "@" + refType.getSimpleName() + " annotation."
-					          , method
-					          );
-					continue;
-				}
-				
-				if (annots.size() > 1)
-				{
-					util.error( "The MagicProperty " + propertyName + " " +
-				                "refers to the multiply-defined " +
-				                "@" + refType.getSimpleName() + " annotation."
-				              , method
-				              );
-					continue;
-				}
-				
-				AnnotationMirror refVal = annots.iterator().next(); 
-				
-				//
-				// Get the "value" field of the referred-to annotation.
-				//
-				
-				methodName = refVal.getElementValues().get(value).getValue().toString();
-			}
-			else
-			{
-				//
-				// Life is much easier - we are given the method name directly
-				//
-				methodName = argValue;
-			}
-			
-			List<ExecutableElement> methods = ElementFilter.methodsIn(util.findBySimpleName(clazz, methodName));
+		//
+		// walk through the parameters and find the corresponding methods.
+		//
+		
+		for (MethodDefn methDef : propDef.parameters)
+		{
+			resolve(clazz, method, a, methDef);
+		}
+
+	}
+	
+	private MethodWrapper resolve ( TypeElement       clazz
+	                              , ExecutableElement method
+	                              , AnnotationMirror  a
+	                              , MethodDefn        def
+	                              )
+	{
+		String annotationName = "@" + a.getAnnotationType().asElement().getSimpleName();
+		
+		Map<? extends ExecutableElement, ? extends AnnotationValue> params
+			= util.eu.getElementValuesWithDefaults(a);
+		
+		String argName  = def.decl.getSimpleName().toString();
+		String argValue = params.get(def.decl).getValue().toString();
+		
+		MethodDefn otherDef = null;
+		List<ExecutableElement> methods;
+		switch (def.type) {
+		case PRIMARY:
+			return new InternalMethod(method);
+		case NAME:
+			methods = ElementFilter.methodsIn(util.findBySimpleName(clazz, argValue));
 			
 			if (methods.isEmpty())
 			{
-				util.error ( "The MagicProperty " + propertyName + " " +
-				             "requires a method named " + methodName + " " +
-				             "to be defined in the same class"
+				util.error ( "The MagicProperty " + annotationName + " " +
+				             "requires a method named " + argValue + " " +
+				             "to be defined in the same class."
 				           , method
 				           );
-				continue;
+				return null;
 			}
 			if (methods.size() > 1)
 			{
-				util.error ( "The MagicProperty " + propertyName + " " +
-				             "refers to the method " + methodName + ", " +
+				util.error ( "The MagicProperty " + annotationName + " " +
+				             "refers to the method " + argValue + ", " +
 				             "which is multiply defined."
 				           , method
 				           );
-				continue;
+				return null;
 			}
 			
-			methodArgs.put(argDecl, methods.get(0));
+			return new InternalMethod(methods.get(0));
+		case EXT:
+			//
+			// Split up the argument into a class name and a method name
+			//
+			int lastDot       = argValue.lastIndexOf('.');
+			String methodName = argValue.substring(lastDot + 1);
+			String className  = argValue.substring(0, lastDot);
+			
+			TypeElement extClass = util.eu.getTypeElement(className);
+			
+			if (extClass == null)
+			{
+				util.error ( "The property " + annotationName + " refers to " +
+				             "the non-existent class " + className + "."
+				           , method
+				           );
+				return null;
+			}
+			
+			methods = ElementFilter.methodsIn(util.findBySimpleName(extClass, methodName));
+			
+			if (methods.isEmpty())
+			{
+				util.error ( "The property " + annotationName + " refers to " +
+				             "the non-existent method " + methodName + " of " +
+				             "class " + extClass.getSimpleName() + "."
+				           , method
+				           );
+				return null;
+			}
+			
+			if (methods.size() > 1)
+			{
+				util.error ( "The property " + annotationName + " refers to " +
+			                 "the multiply-defined method " + methodName + " " +
+			                 "of class " + extClass.getSimpleName() + "."
+			               , method
+			               );
+				return null;
+			}
+
+			return new ExternalMethod(methods.get(0));
+			
+		case DUP:
+			//
+			// Look for the param named by value
+			//
+			for (MethodDefn d : getDefinition(a).parameters) 
+				if (d.decl.getSimpleName().contentEquals(argValue))
+					otherDef = d;
+			
+			if (otherDef == null)
+			{
+				util.error ( "Property '" + argName + "' of annotation " +
+				             annotationName + " refers to non-existent " +
+				             "property '" + argValue + "'."
+				           , method
+				           );
+				return null;
+			}
+			//
+			// Look up that thing.
+			//
+			return resolve(clazz, method, a, otherDef);
+		case REF:
+			//
+			// Find the annotation named by value
+			//
+			TypeElement refType = util.eu.getTypeElement(argValue);
+			
+			if (refType == null)
+			{
+				util.error( "The MagicProperty " + annotationName + " refers " +
+				            "to non-existent class " + argValue + "."
+				          , method
+				          );
+				return null;
+			}
+			
+			//
+			// Get the referred-to annotation from the method. 
+			//
+			
+			Set<AnnotationMirror> annots = util.findAllAnnotationsOf(method, refType);
+			
+			if (annots.isEmpty())
+			{
+				util.error( "The MagicProperty " + annotationName + " " +
+				            "requires the method to also have an " +
+				            "@" + refType.getSimpleName() + " annotation."
+				          , method
+				          );
+				return null;
+			}
+			
+			if (annots.size() > 1)
+			{
+				util.error( "The MagicProperty " + annotationName + " " +
+			                "refers to the multiply-defined " +
+			                "@" + refType.getSimpleName() + " annotation."
+			              , method
+			              );
+				return null;
+			}
+			
+			AnnotationMirror otherAnnot = annots.iterator().next();
+			
+			if (!isMagic(otherAnnot)) {
+				util.error( "The " + argName + " property of the " +
+				            annotationName + " annotation can only refer to " +
+				            "other magic properties."
+				          , method
+				          );
+				return null;
+			}
+			
+			//
+			// Find the 'value' of the other definition.
+			//
+
+			PropertyDefn otherProp = getDefinition(otherAnnot);
+			for (MethodDefn d : otherProp.parameters)
+				if (d.decl.getSimpleName().contentEquals("value"))
+					otherDef = d;
+			
+			if (otherDef == null)
+			{
+				util.error ( "The property @" +
+				             refType.getSimpleName() + " " +
+				             "referred to by " + annotationName + " " +
+				             "must have a 'value' member."
+				           , method
+				           );
+				return null;
+			}
+
+			return resolve(clazz, method, otherAnnot, otherDef);
 		}
-		
-		for (Map.Entry<ExecutableElement, ExecutableElement> e : methodArgs.entrySet())
-		{
-			String note = "\t";
-			note += e.getKey() == null ? "this" : e.getKey().getSimpleName();
-			note += " --> ";
-			note += e.getValue() + " : " + e.getValue().getReturnType();
-			// util.note ( note );
-		}
-		*/
+		return null;
 	}
-	
-	
+
+	private PropertyDefn getDefinition(AnnotationMirror a) {
+		TypeElement  aType = (TypeElement) a.getAnnotationType().asElement();
+
+		try {
+			return new PropertyDefn(util, aType, new BadPropertyException(null));
+		}
+		catch (final BadPropertyException e) {
+			return null;
+		}
+	}
+
 	/**
 	 * Convenience method to determine if a given annotation is a @MagicProperty.
 	 */
@@ -199,5 +283,17 @@ public class TestGenerator
 		return a.getAnnotationType().asElement()
 				.getAnnotation(MagicProperty.class) != null;
 	}
+
+	private interface MethodWrapper {
+	}
 	
+	private final class InternalMethod implements MethodWrapper {
+		public InternalMethod(ExecutableElement e) {
+		}
+	}
+	
+	private final class ExternalMethod implements MethodWrapper {
+		public ExternalMethod(ExecutableElement e) {
+		}
+	}
 }

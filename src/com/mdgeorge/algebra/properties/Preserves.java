@@ -20,7 +20,7 @@ import com.mdgeorge.util.OpUnary;
 @MagicProperty
 public @interface Preserves {
 	@MethodExt  String value();
-	@MethodDup  String codValue() default "com.mdgeorge.algebra.properties.Preserves";
+	@MethodDup  String codValue() default "value";
 	@MethodName String domain()   default "domain";
 	@MethodName String codomain() default "codomain";
 	

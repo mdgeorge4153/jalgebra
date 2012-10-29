@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
@@ -27,7 +26,7 @@ class MethodDefn {
 	}
 
 	public final Type              type;
-	public final Name              name;
+	public final ExecutableElement decl;
 	public final ExecutableElement ap;
 	
 	public MethodDefn ( ExecutableElement    propertyDecl
@@ -38,6 +37,7 @@ class MethodDefn {
 	throws BadPropertyException
 	{
 		BadPropertyException log = new BadPropertyException(parentLog);
+		this.decl = propertyDecl;
 		
 		//
 		// figure out what type or property this is.
@@ -45,16 +45,15 @@ class MethodDefn {
 		if (propertyDecl == null)
 		{
 			this.type = Type.PRIMARY;
-			this.name = null;
 		}
 		else
 		{
-			this.name = propertyDecl.getSimpleName(); 
-			if (!this.name.equals(checkArg.getSimpleName()))
-				log.warn ( "Check method argument corresponding to " + 
-				           this.name + " property is named '" +
-				           checkArg.getSimpleName() + "'.  The recommended name " +
-				           "is '" + this.name + "'."
+			if (!propertyDecl.getSimpleName().equals(checkArg.getSimpleName()))
+				log.warn ( "The check method argument corresponding to the " + 
+				           propertyDecl.getSimpleName() + " property is "    +
+				           "named '" + checkArg.getSimpleName() + "'.  The " +
+				           "recommended name is '"                           +
+				           propertyDecl.getSimpleName() + "'."
 				         , checkArg
 				         );
 

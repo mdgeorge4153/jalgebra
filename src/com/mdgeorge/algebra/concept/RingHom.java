@@ -7,6 +7,6 @@ public interface RingHom < DE, D extends Ring<DE>
                          >
          extends GroupHom<DE, D, CE, C>
 {
-	@CommutesWith("Ring.times")
+	@CommutesWith("com.mdgeorge.algebra.concept.Ring.times")
 	CE ap (DE e);
 }
