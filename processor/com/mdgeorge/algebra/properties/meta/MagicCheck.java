@@ -1,4 +1,4 @@
-package com.mdgeorge.algebra.properties.meta;
+package com.mdgeorge.algebra.properties.meta.annotation;
 
 import java.lang.annotation.*;
 

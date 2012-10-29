@@ -1,8 +1,5 @@
 package com.mdgeorge.algebra.properties.meta;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -11,15 +8,17 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.util.ElementFilter;
 
+import com.mdgeorge.algebra.properties.meta.annotation.MagicCheck;
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
 
-@SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.MagicCheck")
+
+@SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.annotation.MagicCheck")
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class TestGenerator
      extends AbstractProcessor
@@ -37,6 +36,7 @@ public class TestGenerator
 	                       , RoundEnvironment roundEnv
 	                       )
 	{
+		util.note("TestGenerator.process running.");
 		for (Element e : roundEnv.getElementsAnnotatedWith(MagicCheck.class))
 		{
 			assert e instanceof TypeElement;
@@ -51,63 +51,18 @@ public class TestGenerator
 		for (ExecutableElement m : ElementFilter.methodsIn(util.eu.getAllMembers(clazz)))
 			for (AnnotationMirror a : util.findAllAnnotations(m))
 				if (isMagic(a))
-					checkMethodProperty(clazz, m,a);
+						checkMethodProperty(clazz, m, a);
 	}
 	
-	private void checkMethodProperty(TypeElement clazz, ExecutableElement method, AnnotationMirror property)
+	private void checkMethodProperty ( TypeElement clazz
+	                                 , ExecutableElement method
+	                                 , AnnotationMirror a
+	                                 )
 	{
-		String propertyName = "@" + property.getAnnotationType().asElement().getSimpleName(); 
 		
-		// util.note( util.methodName(method) + ": " + propertyName);
-		
-		//
-		// find all of the annotation value methods
-		//
-
-		// if property has a method K, then  
-		Map<ExecutableElement, ExecutableElement> methodArgs = new HashMap<ExecutableElement, ExecutableElement> ();
-		
-		methodArgs.put(null, method);
-		
-		for ( Map.Entry<? extends ExecutableElement,? extends AnnotationValue> e
-		    : util.eu.getElementValuesWithDefaults(property).entrySet())
-		{
-			// TODO: a lot of this logic is duplicated in
-			// PropertyChecker.checkAnnotationValue
-
-			ExecutableElement argDecl  = e.getKey();
-			String            argValue = e.getValue().getValue().toString();
-			
-			if (!util.returnsString(argDecl))
-			{
-				util.warning( "The MagicProperty " + propertyName + " " +
-				              "is malformed " +
-				              "(" + argDecl.getSimpleName() + "is not a String)."
-				            , method
-				            );
-				continue;
-			}
-
-			boolean isMethodName = !util.findAllAnnotationsOf(argDecl, MethodName.class).isEmpty();
-			boolean isMethodRef  = !util.findAllAnnotationsOf(argDecl, MethodRef.class).isEmpty();
-
-			if (!(isMethodName ^ isMethodRef))
-			{
-				util.warning ( "The MagicProperty " + propertyName + " " +
-				               "is malformed " +
-				               "(" + argDecl + " not annotated properly)."
-				             , method
-				             );
-				continue;
-			}
-
-			//
-			// look up the method
-			//
-			
-			String methodName;
-			
-			if (isMethodRef)
+		/*
+		switch(property.type) {
+		if (property.)
 			{
 				//
 				// get the referred-to annotation type
@@ -233,6 +188,7 @@ public class TestGenerator
 			note += e.getValue() + " : " + e.getValue().getReturnType();
 			// util.note ( note );
 		}
+		*/
 	}
 	
 	
