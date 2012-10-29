@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 
 import com.mdgeorge.algebra.properties.meta.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.MethodName;
-import com.mdgeorge.algebra.properties.meta.ExtMethod;
-import com.mdgeorge.algebra.properties.meta.MethodRef;
+import com.mdgeorge.algebra.properties.meta.MethodExt;
+import com.mdgeorge.algebra.properties.meta.MethodDup;
 import com.mdgeorge.algebra.properties.meta.OpNullary;
 import com.mdgeorge.algebra.properties.meta.OpTernary;
 import com.mdgeorge.algebra.properties.meta.OpUnary;
@@ -19,8 +19,8 @@ import com.mdgeorge.algebra.properties.meta.OpUnary;
 @Documented
 @MagicProperty
 public @interface Preserves {
-	@ExtMethod  String value();
-	@MethodRef  String codEq()    default "com.mdgeorge.algebra.properties.Preserves";
+	@MethodExt  String value();
+	@MethodDup  String codEq()    default "com.mdgeorge.algebra.properties.Preserves";
 	@MethodName String domain()   default "domain";
 	@MethodName String codomain() default "codomain";
 	
