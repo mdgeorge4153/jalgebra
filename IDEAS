@@ -1,0 +1,51 @@
+Some thoughts, so I can stop thinking about them
+================================================
+
+Unification:
+ - we're at the point where there's a list of functions and a list of aps and a
+   list of type variables.  To unify, just walk over the lists one by one (prob.
+   going in order will give best error messages), and if ou find a variable, see
+   if it's already bound, if so check same, otherwise bind.
+
+
+Handling Z/pZ:
+ - Perhaps a SingletonInteger<N extends SingletonInteger> type, with concrete
+   extensions One extends Singleton<One>, Two extends Singleton<Two>, ...
+
+   getValue : SI<N>   → Integer
+   getType  : Integer → SI<?>
+
+
+ - Maybe also want SingletonPrimeInteger<P extends SPI> extends SI<P>?
+
+Rot15:
+ - There's a different implementation of Rot15 in tangy.  It's probably better,
+   it's not built out of generic components
+
+Dealing with inherited properties:
+ - A special annotation @Inherited("@Foo", "@Bar", "@Baz") which just documents
+   inherited properties, checked like @Override.  So Field.times would be
+
+   @Inherited("@Commutative", "@Associative", "@Identity('one')")
+   @Inverse("inv")
+
+   That way everything gets documented.  This could probably be done in a
+   generally useful way by annotating the properties @InheritedMethod or
+   @MustBeInherited or something.
+
+
+Documentation:
+ - should perhaps make Property.Definition package protected or something so it
+   doesn't show up in javadoc.  I could generate checking code in the same
+   package
+
+ - build and read the javadoc
+
+ - ask stackoverflow code review how much documentation should be written (in
+   the presence of 'executable documentation')
+ - maybe just use /** @see super.plus */
+
+ - ask stackoverflow code review about inherited documentation
+
+
+
