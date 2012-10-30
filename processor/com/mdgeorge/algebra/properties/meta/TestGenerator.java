@@ -1,5 +1,6 @@
 package com.mdgeorge.algebra.properties.meta;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +16,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 
 import com.mdgeorge.algebra.properties.meta.annotation.MagicCheck;
@@ -75,17 +78,22 @@ public class TestGenerator
 		// walk through the parameters and find the corresponding methods.
 		//
 		
+		List<MethodWrapper> methods = new ArrayList<MethodWrapper> ();
 		for (MethodDefn methDef : propDef.parameters)
-		{
-			resolve(clazz, method, a, methDef);
-		}
+			methods.add(resolve(clazz, method, a, methDef));
 
+		if (methods.contains(null))
+			return;
+		
+		for (MethodWrapper m : methods) {
+			util.note("comparing " + m.def.ap + " and " + m.impl);
+		}
 	}
 	
-	private MethodWrapper resolve ( TypeElement       clazz
-	                              , ExecutableElement method
-	                              , AnnotationMirror  a
-	                              , MethodDefn        def
+	private MethodWrapper resolve ( TypeElement          clazz
+	                              , ExecutableElement    method
+	                              , AnnotationMirror     a
+	                              , MethodDefn           def
 	                              )
 	{
 		String annotationName = "@" + a.getAnnotationType().asElement().getSimpleName();
@@ -100,7 +108,7 @@ public class TestGenerator
 		List<ExecutableElement> methods;
 		switch (def.type) {
 		case PRIMARY:
-			return new InternalMethod(method);
+			return new InternalMethod(def, method);
 		case NAME:
 			methods = ElementFilter.methodsIn(util.findBySimpleName(clazz, argValue));
 			
@@ -123,7 +131,7 @@ public class TestGenerator
 				return null;
 			}
 			
-			return new InternalMethod(methods.get(0));
+			return new InternalMethod(def, methods.get(0));
 		case EXT:
 			//
 			// Split up the argument into a class name and a method name
@@ -165,7 +173,7 @@ public class TestGenerator
 				return null;
 			}
 
-			return new ExternalMethod(methods.get(0));
+			return new ExternalMethod(def, methods.get(0));
 			
 		case DUP:
 			//
@@ -284,16 +292,29 @@ public class TestGenerator
 				.getAnnotation(MagicProperty.class) != null;
 	}
 
-	private interface MethodWrapper {
-	}
-	
-	private final class InternalMethod implements MethodWrapper {
-		public InternalMethod(ExecutableElement e) {
+	private abstract class MethodWrapper {
+		public final List<TypeMirror>  args;
+		public final MethodDefn        def;
+		public final ExecutableElement impl;
+		protected MethodWrapper(MethodDefn def, ExecutableElement m) {
+			this.args = new ArrayList<TypeMirror>();
+			this.def  = def;
+			this.impl = m;
+			for (VariableElement v : m.getParameters())
+				args.add(v.asType());
 		}
 	}
 	
-	private final class ExternalMethod implements MethodWrapper {
-		public ExternalMethod(ExecutableElement e) {
+	private final class InternalMethod extends MethodWrapper {
+		public InternalMethod(MethodDefn def, ExecutableElement m) {
+			super(def, m);
+		}
+	}
+	
+	private final class ExternalMethod extends MethodWrapper {
+		public ExternalMethod(MethodDefn def, ExecutableElement m) {
+			super(def, m);
+			this.args.add(0, m.asType());
 		}
 	}
 }

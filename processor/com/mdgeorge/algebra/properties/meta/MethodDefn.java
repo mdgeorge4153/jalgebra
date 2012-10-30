@@ -8,6 +8,7 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
@@ -27,7 +28,8 @@ class MethodDefn {
 
 	public final Type              type;
 	public final ExecutableElement decl;
-	public final ExecutableElement ap;
+	public final DeclaredType      container;
+	public final ExecutableType    ap;
 	
 	public MethodDefn ( ExecutableElement    propertyDecl
 	                  , VariableElement      checkArg
@@ -103,7 +105,8 @@ class MethodDefn {
 		
 		log.dumpAndThrow();
 		
-		Element type = ((DeclaredType) checkArgType).asElement();
+		this.container = (DeclaredType) checkArgType;
+		Element type = this.container.asElement();
 		if (!(type instanceof TypeElement))
 			log.error(badArg + " (something strange going on)", checkArg);
 		
@@ -122,7 +125,7 @@ class MethodDefn {
 		
 		log.dumpAndThrow();
 		
-		this.ap = (ExecutableElement) ap;
+		this.ap = (ExecutableType) utils.tu.asMemberOf(container, ap);
 	}
 	
 }
