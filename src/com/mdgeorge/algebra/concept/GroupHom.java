@@ -15,6 +15,7 @@ public interface GroupHom < DE, D extends Group<DE>
                           >
          extends SetHom<DE, D, CE, C>
 {
-	@Override @CommutesWith("com.mdgeorge.algebra.concept.Group.plus")
+	@Override
+	@CommutesWith("com.mdgeorge.algebra.concept.Group.plus")
 	CE ap (DE e);
 }

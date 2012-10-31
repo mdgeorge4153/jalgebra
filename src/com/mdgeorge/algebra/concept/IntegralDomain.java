@@ -10,6 +10,7 @@ import com.mdgeorge.algebra.properties.NoZeroDividers;
  * @author mdgeorge
  */
 public interface IntegralDomain<E> extends Ring<E> {
+	@Override
 	@NoZeroDividers
 	E times(E a, E b);
 }

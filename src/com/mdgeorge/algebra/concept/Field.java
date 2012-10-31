@@ -10,9 +10,10 @@ import com.mdgeorge.algebra.properties.Inverse;
  * @author mdgeorge
  */
 public interface Field<E> extends IntegralDomain<E> {
-	@Override @Inverse("inv")
+	@Override
+	@Inverse("inv")
 	E times (E a, E b);
-	
+
 	/** @throws IllegalArgumentException if a is zero. */
 	E inv (E a) throws IllegalArgumentException;
 }

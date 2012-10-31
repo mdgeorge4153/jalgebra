@@ -12,6 +12,7 @@ import com.mdgeorge.algebra.properties.AntiSymmetric;
 public interface PartialOrder <E>
          extends Preorder<E>
 {
-	@Override @AntiSymmetric
+	@Override
+	@AntiSymmetric
 	Boolean leq(E a, E b);
 }

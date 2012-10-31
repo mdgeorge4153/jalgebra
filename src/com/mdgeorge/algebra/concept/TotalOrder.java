@@ -13,6 +13,7 @@ import com.mdgeorge.algebra.properties.Total;
 public interface TotalOrder<E>
          extends PartialOrder<E>
 {
-	@Override @Total
+	@Override
+	@Total
 	Boolean leq(E a, E b);
 }
