@@ -8,6 +8,13 @@ Unification:
    if it's already bound, if so check same, otherwise bind.
 
 
+Functional:
+ - I've been implicitly assuming that everything is functional -- should test it
+   with an @Functional annotation.
+
+ - No good way with current design to unify unary, nullary, binary functional
+   annotation. :(  Is it time to curry?
+
 Handling Z/pZ:
  - Perhaps a SingletonInteger<N extends SingletonInteger> type, with concrete
    extensions One extends Singleton<One>, Two extends Singleton<Two>, ...
@@ -17,6 +24,8 @@ Handling Z/pZ:
 
 
  - Maybe also want SingletonPrimeInteger<P extends SPI> extends SI<P>?
+
+ - This smells like crack-rock
 
 Rot15:
  - There's a different implementation of Rot15 in tangy.  It's probably better,
@@ -48,4 +57,6 @@ Documentation:
  - ask stackoverflow code review about inherited documentation
 
 
-
+Build:
+ - separate meta-properties into common jar, depended on by both processor and
+   code?
