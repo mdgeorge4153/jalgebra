@@ -1,9 +1,15 @@
 package com.mdgeorge.algebra.properties;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
 import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
 import com.mdgeorge.util.OpBinary;
 import com.mdgeorge.util.OpNullary;
 
+@Target(ElementType.METHOD)
+@Documented
 @MagicProperty
 public @interface NoZeroDividers {
 	

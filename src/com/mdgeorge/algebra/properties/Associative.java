@@ -13,9 +13,7 @@ import com.mdgeorge.util.OpBinary;
  * f(a, f(b,c)) = f(f(a,b), c) 
  *
  * @author mdgeorge
- *
  */
-@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
 @MagicProperty

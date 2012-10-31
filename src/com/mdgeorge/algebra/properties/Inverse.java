@@ -1,5 +1,9 @@
 package com.mdgeorge.algebra.properties;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
 import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
 import com.mdgeorge.algebra.properties.meta.annotation.MethodRef;
@@ -7,6 +11,8 @@ import com.mdgeorge.util.OpBinary;
 import com.mdgeorge.util.OpNullary;
 import com.mdgeorge.util.OpUnary;
 
+@Target(ElementType.METHOD)
+@Documented
 @MagicProperty
 public @interface Inverse {
 	@MethodName String eq    () default "eq";

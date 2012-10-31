@@ -15,7 +15,6 @@ import com.mdgeorge.util.OpNullary;
  * @author mdgeorge
  *
  */
-@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
 @MagicProperty

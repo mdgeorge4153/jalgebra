@@ -2,15 +2,12 @@ package com.mdgeorge.algebra.properties;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
 import com.mdgeorge.util.OpBinary;
 
-@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
 @MagicProperty

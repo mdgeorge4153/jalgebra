@@ -11,7 +11,6 @@ import com.mdgeorge.util.OpBinary;
  * @author mdgeorge
  *
  */
-@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
 @MagicProperty

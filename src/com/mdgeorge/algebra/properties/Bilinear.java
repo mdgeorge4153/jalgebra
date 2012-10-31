@@ -1,8 +1,16 @@
 package com.mdgeorge.algebra.properties;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
+import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
 import com.mdgeorge.algebra.properties.meta.annotation.MethodName;
 import com.mdgeorge.util.OpBinary;
 
+@Target(ElementType.METHOD)
+@Documented
+@MagicProperty
 public @interface Bilinear {
 	@MethodName String smult() default "smult";
 	@MethodName String eq()    default "eq";
