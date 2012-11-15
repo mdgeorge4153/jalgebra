@@ -20,8 +20,10 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 
+import com.mdgeorge.algebra.properties.meta.MethodDefn.Type;
 import com.mdgeorge.algebra.properties.meta.annotation.MagicCheck;
 import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
+import com.mdgeorge.util.Utils;
 
 
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.annotation.MagicCheck")
@@ -79,14 +81,19 @@ public class TestGenerator
 		//
 		
 		List<MethodWrapper> methods = new ArrayList<MethodWrapper> ();
+
+		methods.add(resolve(clazz, method, a, propDef.annotatedMethod));
 		for (MethodDefn methDef : propDef.parameters)
 			methods.add(resolve(clazz, method, a, methDef));
 
 		if (methods.contains(null))
 			return;
 		
+		util.note("Looking at @" + a.getAnnotationType().asElement().getSimpleName() + " on " + clazz.getSimpleName() + "."+ method.getSimpleName());
+		util.note("  Type variables: " + propDef.checkTypeParams);
+		
 		for (MethodWrapper m : methods) {
-			util.note("comparing " + m.def.ap + " and " + m.impl);
+			util.note("  unifying " + m.def.ap + " and " + m);
 		}
 	}
 	
@@ -96,6 +103,9 @@ public class TestGenerator
 	                              , MethodDefn           def
 	                              )
 	{
+		if (def.type == Type.PRIMARY)
+			return new InternalMethod(def, method);
+			
 		String annotationName = "@" + a.getAnnotationType().asElement().getSimpleName();
 		
 		Map<? extends ExecutableElement, ? extends AnnotationValue> params
@@ -107,8 +117,6 @@ public class TestGenerator
 		MethodDefn otherDef = null;
 		List<ExecutableElement> methods;
 		switch (def.type) {
-		case PRIMARY:
-			return new InternalMethod(def, method);
 		case NAME:
 			methods = ElementFilter.methodsIn(util.findBySimpleName(clazz, argValue));
 			
@@ -294,6 +302,7 @@ public class TestGenerator
 
 	private abstract class MethodWrapper {
 		public final List<TypeMirror>  args;
+		public final TypeMirror        retn;
 		public final MethodDefn        def;
 		public final ExecutableElement impl;
 		protected MethodWrapper(MethodDefn def, ExecutableElement m) {
@@ -302,6 +311,11 @@ public class TestGenerator
 			this.impl = m;
 			for (VariableElement v : m.getParameters())
 				args.add(v.asType());
+			this.retn = m.getReturnType();
+		}
+		
+		public String toString() {
+			return "(" + Utils.join(args, ",") + ")" + retn;
 		}
 	}
 	
@@ -314,7 +328,7 @@ public class TestGenerator
 	private final class ExternalMethod extends MethodWrapper {
 		public ExternalMethod(MethodDefn def, ExecutableElement m) {
 			super(def, m);
-			this.args.add(0, m.asType());
+			this.args.add(0, m.getEnclosingElement().asType());
 		}
 	}
 }
