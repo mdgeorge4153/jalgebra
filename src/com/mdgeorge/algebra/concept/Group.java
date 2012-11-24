@@ -10,7 +10,9 @@ import com.mdgeorge.algebra.properties.*;
  * @see <a href="http://en.wikipedia.org/wiki/Abelian_group">Abelian Group on Wikipedia</a>
  * @author mdgeorge
  */
-public interface Group<E> extends Set<E> {
+public interface Group <E>
+         extends Set   <E>
+{
 	@Commutative @Associative @Identity("zero") @Inverse("neg")
 	E plus(E a, E b);
 	

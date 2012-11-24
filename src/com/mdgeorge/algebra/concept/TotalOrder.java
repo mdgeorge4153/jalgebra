@@ -10,8 +10,8 @@ import com.mdgeorge.algebra.properties.Total;
  * @see java.util.Comparator
  * @author mdgeorge
  */
-public interface TotalOrder<E>
-         extends PartialOrder<E>
+public interface TotalOrder   <E>
+         extends PartialOrder <E>
 {
 	@Override
 	@Total

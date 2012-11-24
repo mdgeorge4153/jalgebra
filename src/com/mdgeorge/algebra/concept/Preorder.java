@@ -11,8 +11,8 @@ import com.mdgeorge.algebra.properties.Transitive;
  * @see <a href="http://en.wikipedia.org/wiki/Preorder">Preorder on Wikipedia</a>
  * @author mdgeorge
  */
-public interface Preorder<E>
-         extends Set<E>
+public interface Preorder <E>
+         extends Set      <E>
 {
 	@Reflexive @Transitive
 	Boolean leq(E a, E b);

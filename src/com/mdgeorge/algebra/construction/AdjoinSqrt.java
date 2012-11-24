@@ -5,11 +5,11 @@ import com.mdgeorge.algebra.concept.OrderedRing;
 import com.mdgeorge.algebra.numbers.NumberType;
 
 public class AdjoinSqrt< E
-                       , R extends OrderedRing<E> & Algebra<E, Integer, Z>
+                       , R extends OrderedRing<E> & Algebra<E, Integer>
                        , N extends NumberType
                        >
   implements OrderedRing<AdjoinSqrt<E,R,N>.Element>
-           , Algebra<AdjoinSqrt<E,R,N>.Element, Integer, Z>
+           , Algebra<AdjoinSqrt<E,R,N>.Element, Integer>
 {
 	private final E n;
 	private final R r;
@@ -45,6 +45,11 @@ public class AdjoinSqrt< E
 	public AdjoinSqrt(R r, N n) {
 		this.n = Z.into(r).ap(n.value);
 		this.r = r;
+	}
+	
+	@Override
+	public Z scalars() {
+		return Z.instance;
 	}
 
 	@Override

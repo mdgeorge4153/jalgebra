@@ -10,7 +10,7 @@ import com.mdgeorge.util.NotImplementedException;
 public class Rot15Direct
   implements OrderedRing<Rot15Direct.Element>
            , Field<Rot15Direct.Element>
-           , Algebra<Rot15Direct.Element, Integer, Z>
+           , Algebra<Rot15Direct.Element, Integer>
 {
 	private Sqrt6 s6;
 	private Z     z;
@@ -52,6 +52,11 @@ public class Rot15Direct
 
 	protected Element makeElement(Sqrt6.Element num, Integer den) {
 		return new Element(num, den);
+	}
+	
+	@Override
+	public Z scalars() {
+		return Z.instance;
 	}
 	
 	@Override

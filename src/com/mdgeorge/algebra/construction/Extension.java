@@ -9,10 +9,9 @@ import com.mdgeorge.algebra.concept.RingHom;
 import com.mdgeorge.util.Utils;
 
 public abstract class Extension< E
-                               , R extends Ring<E>
                                , S extends Extension.Signature<E>
                                >
-           implements Algebra<Extension<E,R,S>.Element, E, R>
+           implements Algebra<Extension<E,S>.Element, E>
 {
 	public interface Signature<E> {
 		/**
@@ -108,23 +107,28 @@ public abstract class Extension< E
 	}
 
 	public final class NaturalHom
-	        implements RingHom<E, R, Element, Extension<E,R,S>>
+	        implements RingHom<E, Element>
 	{
-		public  R                domain()   { return r; }
-		public  Extension<E,R,S> codomain() { return Extension.this; }
+		public  Ring<E>        domain()   { return r; }
+		public  Extension<E,S> codomain() { return Extension.this; }
 		public  Element ap (E e) { return smult(e,one()); }
 	}
 	
 	public final NaturalHom INJ = new NaturalHom();
 	
 	private final S   s;
-	private final R   r;
+	private final Ring<E>   r;
 	private final int n;
 
-	protected Extension(S s, R r) {
+	protected Extension(S s, Ring<E> r) {
 		this.s = s;
 		this.r = r;
 		this.n = s.dimension();
+	}
+	
+	@Override
+	public Ring<E> scalars() {
+		return this.r;
 	}
 
 	@Override

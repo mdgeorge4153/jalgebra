@@ -12,12 +12,17 @@ import com.mdgeorge.algebra.properties.meta.annotation.MagicCheck;
 public class Z
   implements IntegralDomain<Integer>
            , OrderedRing<Integer>
-           , Algebra<Integer, Integer, Z>
+           , Algebra<Integer, Integer>
 {
 
 	public final static Z instance = new Z();
 	private Z() { }
 
+	@Override
+	public Z scalars() {
+		return instance;
+	}
+	
 	@Override
 	public Integer one() {
 		return 1;
@@ -49,13 +54,13 @@ public class Z
 	}
 
 	public static class NaturalHom<E, R extends Ring<E>>
-	          implements RingHom<Integer, Z, E, R>
+	         implements RingHom<Integer, E>
 	{
-		private final GroupAsZModule<E, R> m;
+		private final GroupAsZModule<E> m;
 		private final R                    r;
 
 		private NaturalHom(R r) {
-			this.m = new GroupAsZModule<E, R>(r);
+			this.m = new GroupAsZModule<E>(r);
 			this.r = r;
 		}
 		

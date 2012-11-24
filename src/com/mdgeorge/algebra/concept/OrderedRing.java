@@ -28,8 +28,8 @@ import com.mdgeorge.algebra.properties.NoNegOne;
  * @see <a href="http://en.wikipedia.org/wiki/Ordered_field#Positive_cone">Positive Cone on Wikipedia</a>
  * @author mdgeorge
  */
-public interface OrderedRing<E>
-         extends Ring<E>
+public interface OrderedRing <E>
+         extends Ring        <E>
 {
 	@NoNegOne
 	@ContainsSquares

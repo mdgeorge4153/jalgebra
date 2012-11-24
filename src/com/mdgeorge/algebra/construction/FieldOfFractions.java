@@ -36,7 +36,7 @@ public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
 
 	@MagicCheck
 	public final class NaturalHom
-	        implements RingHom<E, D, Element, FieldOfFractions<E,D>>
+	        implements RingHom<E, Element>
 	{
 		public D domain()                       { return d; }
 		public FieldOfFractions<E,D> codomain() { return FieldOfFractions.this; }

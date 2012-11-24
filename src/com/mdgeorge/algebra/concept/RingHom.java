@@ -2,12 +2,13 @@ package com.mdgeorge.algebra.concept;
 
 import com.mdgeorge.algebra.properties.CommutesWith;
 
-public interface RingHom < DE, D extends Ring<DE>
-                         , CE, C extends Ring<CE>
-                         >
-         extends GroupHom<DE, D, CE, C>
+public interface RingHom <DE, CE>
+         extends GroupHom<DE, CE>
 {
 	@Override
 	@CommutesWith("com.mdgeorge.algebra.concept.Ring.times")
 	CE ap (DE e);
+	
+	@Override Ring<DE> domain();
+	@Override Ring<CE> codomain();
 }

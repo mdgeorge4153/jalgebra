@@ -10,7 +10,7 @@ import com.mdgeorge.algebra.properties.AntiSymmetric;
  * @author mdgeorge
  */
 public interface PartialOrder <E>
-         extends Preorder<E>
+         extends Preorder     <E>
 {
 	@Override
 	@AntiSymmetric

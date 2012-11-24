@@ -10,12 +10,13 @@ import com.mdgeorge.algebra.properties.CommutesWith;
  * @see <a href="http://en.wikipedia.org/wiki/Group_homomorphism">Group homomorphism on Wikipedia</a>
  * @author mdgeorge
  */
-public interface GroupHom < DE, D extends Group<DE>
-                          , CE, C extends Group<CE>
-                          >
-         extends SetHom<DE, D, CE, C>
+public interface GroupHom <DE, CE>
+         extends SetHom   <DE, CE>
 {
 	@Override
 	@CommutesWith("com.mdgeorge.algebra.concept.Group.plus")
 	CE ap (DE e);
+	
+	@Override Group<DE> domain();
+	@Override Group<CE> codomain();
 }

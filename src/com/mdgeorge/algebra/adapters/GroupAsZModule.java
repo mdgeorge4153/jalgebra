@@ -4,15 +4,17 @@ import com.mdgeorge.algebra.concept.Group;
 import com.mdgeorge.algebra.concept.Module;
 import com.mdgeorge.algebra.construction.Z;
 
-public final class GroupAsZModule< E
-                                 , G extends Group<E>
-                                 >
-        implements Module<E, Integer, Z>
+public final class GroupAsZModule <E>
+        implements Module         <E, Integer>
 {
-	private final G g;
+	private final Group<E> g;
 	
-	public GroupAsZModule(G g) {
+	public GroupAsZModule(Group<E> g) {
 		this.g = g;
+	}
+	
+	public Z scalars() {
+		return Z.instance;
 	}
 	
 	@Override public E       plus (E a, E b) { return g.plus(a, b); }

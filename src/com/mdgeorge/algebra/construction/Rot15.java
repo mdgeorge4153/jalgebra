@@ -100,11 +100,10 @@ public final class Rot15
 	}
 
 	public static final class Root6
-                          extends Extension < Integer
-                                            , Z
-                                            , SignatureRoot6<Integer, Z>
-                                            >
-	               implements IntegralDomain < Root6.Element > 
+	                  extends Extension < Integer
+	                                    , SignatureRoot6<Integer, Z>
+	                                    >
+	               implements IntegralDomain <Root6.Element> 
 	{
 		public static final Root6 instance = new Root6();
 		private Root6() {
@@ -190,7 +189,6 @@ public final class Rot15
 
 	public static final class Cos15e
 	                  extends Extension < Cos15.Element
-	                                    , Cos15
 	                                    , SignatureComplex<Cos15.Element, Cos15>
 	                                    >
 	               implements IntegralDomain <Cos15e.Element>

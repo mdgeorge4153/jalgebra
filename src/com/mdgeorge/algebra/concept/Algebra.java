@@ -10,8 +10,9 @@ import com.mdgeorge.algebra.properties.Bilinear;
  * @see <a href="http://en.wikipedia.org/wiki/Associative_algebra">Associative Algebra on Wikipedia</a>
  * @author mdgeorge
  */
-public interface Algebra<E, S, R extends Ring<S>>
-         extends Module<E, S, R>, Ring<E>
+public interface Algebra <E, S>
+         extends Module  <E, S>
+               , Ring    <E>
 {
 	@Override @Bilinear
 	E times (E a, E b);

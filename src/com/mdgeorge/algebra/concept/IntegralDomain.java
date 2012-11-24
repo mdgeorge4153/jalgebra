@@ -9,7 +9,9 @@ import com.mdgeorge.algebra.properties.NoZeroDividers;
  * @see <a href="http://en.wikipedia.org/wiki/Integral_domain">Integral domain on Wikipedia</a>
  * @author mdgeorge
  */
-public interface IntegralDomain<E> extends Ring<E> {
+public interface IntegralDomain <E>
+         extends Ring           <E>
+{
 	@Override
 	@NoZeroDividers
 	E times(E a, E b);

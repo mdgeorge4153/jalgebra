@@ -10,7 +10,9 @@ import com.mdgeorge.algebra.properties.*;
  * @see <a href="http://en.wikipedia.org/wiki/Commutative_ring">Commutative Ring on Wikipedia</a>
  * @author mdgeorge
  */
-public interface Ring<E> extends Group<E> {
+public interface Ring  <E>
+         extends Group <E>
+{
 	@Associative @Commutative @Identity("one") @DistributesOver("plus")
 	E times (E a, E b);
 	

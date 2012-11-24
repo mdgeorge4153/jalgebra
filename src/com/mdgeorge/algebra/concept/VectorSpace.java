@@ -8,10 +8,8 @@ package com.mdgeorge.algebra.concept;
  * @see <a href="http://en.wikipedia.org/wiki/Vector_space">Vector space on Wikipedia</a>
  * @author mdgeorge
  */
-public interface VectorSpace < V
-                             , S
-                             , F extends Field<S>
-                             >
-         extends Module<V, S, F>
+public interface VectorSpace <V, S>
+         extends Module      <V, S>
 {
+	@Override Field<S> scalars();
 }
