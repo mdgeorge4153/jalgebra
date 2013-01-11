@@ -89,12 +89,14 @@ public class TestGenerator
 		if (methods.contains(null))
 			return;
 		
+		/*
 		util.note("Looking at @" + a.getAnnotationType().asElement().getSimpleName() + " on " + clazz.getSimpleName() + "."+ method.getSimpleName());
 		util.note("  Type variables: " + propDef.checkTypeParams);
 		
 		for (MethodWrapper m : methods) {
 			util.note("  unifying " + m.def.ap + " and " + m);
 		}
+		*/
 	}
 	
 	private MethodWrapper resolve ( TypeElement          clazz
