@@ -20,7 +20,8 @@ public class SegmentTraits<NT>
 	private final OrderedField<NT> f;
 	private final TotalOrder<NT>   compare;
 	
-	public SegmentTraits(OrderedField<NT> f) {
+	public SegmentTraits(OrderedField<NT> f)
+	{
 		this.f = f;
 		this.compare = new OrderedRingAsTotalOrder<NT> (f);
 	}
@@ -173,13 +174,6 @@ public class SegmentTraits<NT>
 		NT D = f.plus(f.times(d1x, d2y), f.neg(f.times(d1y, d2x)));
 
 		//
-		// We first compute the RHS of this equation
-		//
-
-		NT rhs1 = f.plus(f.times(d2y,dqx), f.neg(f.times(d1y, dqy)));
-		NT rhs2 = f.plus(f.times(d1x,dqy), f.neg(f.times(d2x, dqx)));
-
-		//
 		// If D = 0, then the two lines are parallel (D = 0 exactly when
 		// dy1/dx1 = dy2/dx2)
 		//
@@ -188,29 +182,64 @@ public class SegmentTraits<NT>
 		{
 			//
 			// In this case, the lines may either coincide or be
-			// disjoint.  If they coincide, then by the above
-			// equation, the RHS must be zero.  Conversely, if the
-			// RHS is zero, then
-			//    dqy/dqx = d2y/d1y (by the first row)
-			//    dqy/dqx = d2x/d1x (by the second).
-			// This means that TODO
-			throw new NotImplementedException("parallel case");
+			// disjoint.
+			//
+			// To figure out which, we will see if P2 lies on the line defined
+			// by C1.  This will be true if the line from Q1 to Q2 has the same
+			// slope as the line from P1 to Q1.
+			//
 
-			/*
-			NT sn = f.plus(c1.min.y, f.neg(c2.min.y));
-			NT sd = f.plus(c1.min.x, f.neg(c2.min.x));
-			
-			if (compare.eq(f.times(sn1, sd), f.times(sn, sd1)))
+			if (!compare.eq(f.times(dqy, d1x), f.times(dqx, d1y)))
 			{
-				// c1 and c2 are collinear
-				throw new NotImplementedException("collinear intersection");
+				// In this case, c1 and c2 are disjoint.  Return no intersections.
+				return Collections.emptyList();
 			}
 			else
 			{
-				// c1 and c2 are parallel but not collinear... there is no intersection.
-				return Collections.emptyList();
+				//
+				// In this case, c1 and c2 are collinear.  So, we need to figure
+				// out the overlap
+				//
+				// Let's reorder the two curves so that a1 is smaller than a2.
+				
+				if (points.leq(c1.min, c2.min)) {
+					Segment t = c1;
+					c1 = c2;
+					c2 = t;
+				}
+				
+				// Now there are a few possible cases, depending on the location
+				// of c1.max relative to the endpoints of c2:
+				
+				if (points.leq(c2.max, c1.max))
+					// c1: min ------------- max
+					// c2:      min --- max
+					// ix: c2
+					return Collections.singletonList((Subcurve<Point,Segment>)
+							new Subcurve.Curve<Point, Segment>(c2));
+
+				if (points.eq(c2.min, c1.max))
+					// c1: min ----- max
+					// c2:           min ----- max
+					// ix: c1.max
+					return Collections.singletonList((Subcurve<Point,Segment>)
+							new Subcurve.Point<Point, Segment>(c1.max, 1));
+				
+				if (points.leq(c2.min, c1.max))
+					// c1: min ----- max
+					// c2:      min ----- max
+					// ix: (c2.min, c1.max)
+					
+					return Collections.singletonList((Subcurve<Point,Segment>)
+							new Subcurve.Curve<Point, Segment> (
+									new Segment(c2.min, c1.max)));
+					
+				else
+					// c1: min --- max
+					// c2:             min --- max
+					// ix: none
+					return Collections.emptyList();
 			}
-			*/
 		}
 		
 		else
@@ -222,6 +251,9 @@ public class SegmentTraits<NT>
 			//
 			// We first solve for t1 and t2.
 			//
+
+			NT rhs1 = f.plus(f.times(d2y,dqx), f.neg(f.times(d1y, dqy)));
+			NT rhs2 = f.plus(f.times(d1x,dqy), f.neg(f.times(d2x, dqx)));
 
 			NT C = f.inv(D);
 			
