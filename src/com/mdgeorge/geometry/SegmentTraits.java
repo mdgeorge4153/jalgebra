@@ -291,7 +291,42 @@ public class SegmentTraits<NT>
 	public Pair<Segment, Segment> split(Segment c, Point p)
 	throws IllegalArgumentException
 	{
-		// TODO Auto-generated method stub
-		throw new NotImplementedException("split");
+		//
+		// to satisfy the contract, we must check that p lies on c.
+		//
+		
+		if (!intersect(p, c))
+			throw new IllegalArgumentException("p is not on c");
+		
+		return new Pair<Segment, Segment> ( new Segment(c.min, p)
+		                                  , new Segment(p, c.max)
+		                                  );
+	}
+	
+	private boolean intersect(Point p, Segment c)
+	{
+		if (points.eq(p, c.min) || points.eq(p, c.max))
+			return true;
+		
+		if (points.leq(p, c.min) || points.leq(c.max, p))
+			return false;
+		
+		//
+		// compare the slopes of
+		//     (c.min, p) = dy1/dx1
+		// and
+		//     (c.min, c.max) = dy2/dx2
+		//
+		
+		NT dx1 = f.plus(p.y,     f.neg(c.min.y));
+		NT dy1 = f.plus(p.x,     f.neg(c.min.x));
+		
+		NT dx2 = f.plus(c.max.y, f.neg(c.min.y));
+		NT dy2 = f.plus(c.max.x, f.neg(c.min.x));
+		
+		if (f.eq(f.times(dy1, dx2), f.times(dx1, dy2)))
+			return true;
+		else
+			return false;
 	}
 }
