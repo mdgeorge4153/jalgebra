@@ -9,7 +9,6 @@ import com.mdgeorge.algebra.concept.OrderedField;
 import com.mdgeorge.algebra.concept.PartialOrder;
 import com.mdgeorge.algebra.concept.Set;
 import com.mdgeorge.algebra.concept.TotalOrder;
-import com.mdgeorge.util.NotImplementedException;
 import com.mdgeorge.util.Pair;
 
 public class SegmentTraits<NT>
