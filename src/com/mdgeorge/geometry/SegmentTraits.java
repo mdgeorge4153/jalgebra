@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-import com.mdgeorge.algebra.adapters.OrderedRingAsTotalOrder;
+import com.mdgeorge.algebra.adapters.OrderedFieldUtils;
 import com.mdgeorge.algebra.concept.OrderedField;
 import com.mdgeorge.algebra.concept.PartialOrder;
 import com.mdgeorge.algebra.concept.Set;
@@ -16,13 +16,11 @@ public class SegmentTraits<NT>
                               , SegmentTraits<NT>.Segment
                               >
 {
-	private final OrderedField<NT> f;
-	private final TotalOrder<NT>   compare;
+	private final OrderedFieldUtils<NT> f;
 	
 	public SegmentTraits(OrderedField<NT> f)
 	{
-		this.f = f;
-		this.compare = new OrderedRingAsTotalOrder<NT> (f);
+		this.f = new OrderedFieldUtils<NT> (f);
 	}
 
 	/*
@@ -42,13 +40,12 @@ public class SegmentTraits<NT>
 	private final TotalOrder<Point> points = new TotalOrder<Point> () {
 		@Override
 		public Boolean eq(Point a, Point b) {
-			return compare.eq(a.x, b.x) && compare.eq(a.y, b.y);
+			return f.eq(a.x, b.x) && f.eq(a.y, b.y);
 		}
 
 		@Override
 		public Boolean leq(Point a, Point b) {
-			return compare.leq(a.x, b.x)
-			    || compare.eq(a.x, b.x) && compare.leq(a.y, b.y);
+			return f.leq(a.x, b.x) || f.eq(a.x, b.x) && f.leq(a.y, b.y);
 		}
 	};
 	
@@ -108,12 +105,12 @@ public class SegmentTraits<NT>
 					throw new IllegalArgumentException();
 				
 				// p1 = a.min - p; p2 = b.min - p;
-				NT p1x = f.plus(a.min.x, f.neg(p.x));
-				NT p1y = f.plus(a.min.y, f.neg(p.y));
-				NT p2x = f.plus(b.min.x, f.neg(p.x));
-				NT p2y = f.plus(b.min.y, f.neg(p.y));
+				NT p1x = f.minus(a.min.x, p.x);
+				NT p1y = f.minus(a.min.y, p.y);
+				NT p2x = f.minus(b.min.x, p.x);
+				NT p2y = f.minus(b.min.y, p.y);
 
-				return compare.leq(f.times(p1x, p2y), f.times(p2x, p1y));
+				return f.divEq(p1y, p1x, p2y, p2x);
 			}
 		};
 	}
@@ -155,9 +152,9 @@ public class SegmentTraits<NT>
 		// 
 		// by defining
 
-		NT d1x = f.plus(p1x, f.neg(q1x)), d1y = f.plus(p1y, f.neg(q1y));
-		NT d2x = f.plus(p2x, f.neg(q2x)), d2y = f.plus(p2y, f.neg(q2y));
-		NT dqx = f.plus(q2x, f.neg(q1x)), dqy = f.plus(q2y, f.neg(q1y));
+		NT d1x = f.minus(p1x, q1x), d1y = f.minus(p1y, q1y);
+		NT d2x = f.minus(p2x, q2x), d2y = f.minus(p2y, q2y);
+		NT dqx = f.minus(q2x, q1x), dqy = f.minus(q2y, q1y);
 
 		// If there is a solution, then it satisfies
 		//
@@ -170,14 +167,14 @@ public class SegmentTraits<NT>
 		// where D = d1x * d2y - d1y * d2x is the determinant of the
 		// matrix on the lhs.
 
-		NT D = f.plus(f.times(d1x, d2y), f.neg(f.times(d1y, d2x)));
+		NT D = f.minus(f.times(d1x, d2y), f.times(d1y, d2x));
 
 		//
 		// If D = 0, then the two lines are parallel (D = 0 exactly when
 		// dy1/dx1 = dy2/dx2)
 		//
 
-		if (compare.eq(D, f.zero()))
+		if (f.eq(D, f.zero()))
 		{
 			//
 			// In this case, the lines may either coincide or be
@@ -188,7 +185,7 @@ public class SegmentTraits<NT>
 			// slope as the line from P1 to Q1.
 			//
 
-			if (!compare.eq(f.times(dqy, d1x), f.times(dqx, d1y)))
+			if (!f.divEq(dqy, dqx, d1y, d1x))
 			{
 				// In this case, c1 and c2 are disjoint.  Return no intersections.
 				return Collections.emptyList();
@@ -251,8 +248,8 @@ public class SegmentTraits<NT>
 			// We first solve for t1 and t2.
 			//
 
-			NT rhs1 = f.plus(f.times(d2y,dqx), f.neg(f.times(d1y, dqy)));
-			NT rhs2 = f.plus(f.times(d1x,dqy), f.neg(f.times(d2x, dqx)));
+			NT rhs1 = f.minus(f.times(d2y,dqx), f.times(d1y, dqy));
+			NT rhs2 = f.minus(f.times(d1x,dqy), f.times(d2x, dqx));
 
 			NT C = f.inv(D);
 			
@@ -263,14 +260,14 @@ public class SegmentTraits<NT>
 			// This will be true if and only if both t1 and t2 are between 0 and
 			// 1.
 			
-			if (compare.leq(f.zero(), t1) && compare.leq(t1, f.one()) &&
-			    compare.leq(f.zero(), t2) && compare.leq(t2, f.one()))
+			if (f.leq(f.zero(), t1) && f.leq(t1, f.one()) &&
+			    f.leq(f.zero(), t2) && f.leq(t2, f.one()))
 			{
 				// we have an intersection: compute p and return it.
 				NT px = f.plus(f.times(t1, p1x),
-						       f.times(f.plus(f.one(), f.neg(t1)), q1x));
+						       f.times(f.minus(f.one(), t1), q1x));
 				NT py = f.plus(f.times(t1, p1y),
-				               f.times(f.plus(f.one(), f.neg(t1)), q1y));
+				               f.times(f.minus(f.one(), t1), q1y));
 				
 				Point p = new Point(px, py);
 				Subcurve<Point, Segment> result =
@@ -304,7 +301,7 @@ public class SegmentTraits<NT>
 	
 	private boolean intersect(Point p, Segment c)
 	{
-		if (points.eq(p, c.min) || points.eq(p, c.max))
+		if (points.eq(p, c.min)  || points.eq(p, c.max))
 			return true;
 		
 		if (points.leq(p, c.min) || points.leq(c.max, p))
@@ -317,14 +314,15 @@ public class SegmentTraits<NT>
 		//     (c.min, c.max) = dy2/dx2
 		//
 		
-		NT dx1 = f.plus(p.y,     f.neg(c.min.y));
-		NT dy1 = f.plus(p.x,     f.neg(c.min.x));
+		NT dy1 = f.minus(p.y,     c.min.y);
+		NT dx1 = f.minus(p.x,     c.min.x);
 		
-		NT dx2 = f.plus(c.max.y, f.neg(c.min.y));
-		NT dy2 = f.plus(c.max.x, f.neg(c.min.x));
+		NT dy2 = f.minus(c.max.y, c.min.y);
+		NT dx2 = f.minus(c.max.x, c.min.x);
 		
-		if (f.eq(f.times(dy1, dx2), f.times(dx1, dy2)))
+		if (f.divEq(dy1, dx1, dy2, dx2))
 			return true;
+		
 		else
 			return false;
 	}
