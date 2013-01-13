@@ -3,8 +3,8 @@ package com.mdgeorge.algebra.construction;
 import com.mdgeorge.algebra.concept.Algebra;
 import com.mdgeorge.algebra.concept.Field;
 import com.mdgeorge.algebra.concept.OrderedRing;
-import com.mdgeorge.algebra.numbers.Three;
-import com.mdgeorge.algebra.numbers.Two;
+import com.mdgeorge.algebra.numbers.N03;
+import com.mdgeorge.algebra.numbers.N02;
 import com.mdgeorge.util.NotImplementedException;
 
 public class Rot15Direct
@@ -112,19 +112,19 @@ public class Rot15Direct
 	}
 }
 
-final class Sqrt2 extends AdjoinSqrt<Integer, Z, Two> {
+final class Sqrt2 extends AdjoinSqrt<Integer, Z, N02> {
 	public static final Sqrt2 instance = new Sqrt2();
 	
 	private Sqrt2() {
-		super(Z.instance, Two.instance);
+		super(Z.instance, N02.instance);
 	}
 }
 
-final class Sqrt6 extends AdjoinSqrt<Sqrt2.Element, Sqrt2, Three> {
+final class Sqrt6 extends AdjoinSqrt<Sqrt2.Element, Sqrt2, N03> {
 	public static final Sqrt6 instance = new Sqrt6();
 	
 	private Sqrt6() {
-		super(Sqrt2.instance, Three.instance);
+		super(Sqrt2.instance, N03.instance);
 	}
 	
 	public Element makeElement(Integer a1, Integer a2, Integer a3, Integer a6) {
