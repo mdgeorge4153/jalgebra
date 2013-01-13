@@ -3,13 +3,12 @@ package com.mdgeorge.algebra.adapters;
 import com.mdgeorge.algebra.concept.OrderedRing;
 import com.mdgeorge.algebra.concept.TotalOrder;
 
-public class OrderedRingAsTotalOrder< E
-                                    , R extends OrderedRing<E>>
+public class OrderedRingAsTotalOrder<E>
   implements TotalOrder<E>
 {
-	private final R r;
+	private final OrderedRing<E> r;
 
-	public OrderedRingAsTotalOrder(R r) {
+	public OrderedRingAsTotalOrder(OrderedRing<E> r) {
 		this.r = r;
 	}
 	
