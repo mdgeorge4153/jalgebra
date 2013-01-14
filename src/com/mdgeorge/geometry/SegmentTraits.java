@@ -91,6 +91,10 @@ public class SegmentTraits<NT>
 		return curve.max;
 	}
 
+	/*
+	 * Geometry ****************************************************************
+	 */
+
 	@Override
 	public PartialOrder<Segment> compareCurvesRightOf(final Point p) {
 		return new PartialOrder<Segment> () {
