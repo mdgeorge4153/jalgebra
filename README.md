@@ -41,6 +41,31 @@ properties are correctly typed (for example, `@Commutative E zero()` is nonsense
 because zero is not a binary relation), and also generates randomized tests
 that invoke the property definitions.
 
+Source Code
+===========
+
+The source code for library is contained in the `src/` directory; the
+`processor/` directory contains the annotation processor mentioned above.
+
+The `com.mdgeorge.geometry` package contains geometric constructions that make
+use of the `com.mdgeorge.algebra` classes.  They can serve as an example of how
+to use the library.  The `algebra` package contains the meat of the library:
+
+ - `com.mdgeorge.concept` contains interfaces defining the algebraic concepts:
+   `Group`, `Ring`, `Module`, etc.
+ - `com.mdgeorge.properties` contains annotation classes that define properties of
+   methods, such as `@Commutative`, `@Associative`, etc.
+ - `com.mdgeorge.construction` contains number types that instantiate the algebraic
+   concepts.  Some, such as `Z` (the integers), `Q` (the rationals) and `Float`
+   are used to handle Java's built in numbers.  Others (such as
+   `FieldOfFractions`) can be parameterized by another number type.
+ - `com.mdgeorge.adapter` contains utility classes that wrap number types and
+   add useful methods.  For example, the `OrderedField` interface provides an
+   inverse method, but not a division method.  `OrderedFieldUtils` wraps an
+   `OrderedField` and adds a division method.  It also adapts the
+   `OrderedField` to the `java.util.Comparator` interface, since the two types
+   are equivalent but defined differently.
+
 Building
 ========
 
