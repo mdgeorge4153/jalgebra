@@ -31,6 +31,10 @@ Rot15:
  - There's a different implementation of Rot15 in tangy.  It's probably better,
    it's not built out of generic components
 
+Verification:
+ - It might be possible to use an SMT solver or something to generate proofs
+   instead of randomized tests for magic properties.
+
 Dealing with inherited properties:
  - A special annotation @Inherited("@Foo", "@Bar", "@Baz") which just documents
    inherited properties, checked like @Override.  So Field.times would be
