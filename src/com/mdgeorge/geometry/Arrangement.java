@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.mdgeorge.geometry.util.AbstractForwardCirculator;
+import com.mdgeorge.util.NotImplementedException;
 
 public class Arrangement {
 
@@ -134,5 +135,9 @@ public class Arrangement {
 		public void inc() {
 			this.current = current.next; 
 		}
+	}
+
+	public static Arrangement overlay (Arrangement a, Arrangement b) {
+		throw new NotImplementedException("Arrangement.overlay");
 	}
 }
