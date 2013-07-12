@@ -53,27 +53,27 @@ public class Z
 		return a * b;
 	}
 
-	public static class NaturalHom<E, R extends Ring<E>>
+	public static class NaturalHom<E>
 	         implements RingHom<Integer, E>
 	{
 		private final GroupAsZModule<E> m;
-		private final R                    r;
+		private final Ring<E>           r;
 
-		private NaturalHom(R r) {
+		private NaturalHom(Ring<E> r) {
 			this.m = new GroupAsZModule<E>(r);
 			this.r = r;
 		}
 		
-		public Z domain()       { return instance; }
-		public R codomain()     { return this.r;   }
+		public Z       domain()       { return instance; }
+		public Ring<E> codomain()     { return this.r;   }
 
 		public E ap(Integer n) {
 			return m.smult(n, r.one());
 		}
 	}
 	
-	public static <E, R extends Ring<E>> NaturalHom<E, R> into (R g) {
-		return new NaturalHom<E,R>(g);
+	public static <E> NaturalHom<E> into (Ring<E> g) {
+		return new NaturalHom<E>(g);
 	}
 
 	@Override
