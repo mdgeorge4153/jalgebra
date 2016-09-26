@@ -52,6 +52,11 @@ public class Z
 	public Integer times(Integer a, Integer b) {
 		return a * b;
 	}
+	
+	@Override
+	public Integer fromInt(int i) {
+		return i;
+	}
 
 	public static class NaturalHom<E>
 	         implements RingHom<Integer, E>

@@ -92,6 +92,11 @@ public abstract class FieldOfFractions<E, D extends IntegralDomain<E>>
 		
 		return new Element(a.den, a.num);
 	}
+	
+	@Override
+	public Element fromInt(int i) {
+		return new Element(d.fromInt(i), d.one());
+	}
 }
 
 /*

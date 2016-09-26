@@ -19,4 +19,8 @@ public interface Group <E>
 	E neg(E a);
 	
 	E zero();
+	
+	default E minus(E a, E b) {
+		return plus(a, neg(b));
+	}
 }

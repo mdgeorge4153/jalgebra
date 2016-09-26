@@ -17,4 +17,14 @@ public interface Ring  <E>
 	E times (E a, E b);
 	
 	E one();
+	
+	default E fromInt(int i) {
+		if (i < 0)
+			return neg(fromInt(-i));
+		if (i == 0)
+			return zero();
+
+		E rest = fromInt(i/2);
+		return plus(plus(rest, rest), i%2 == 0 ? zero() : one());
+	}
 }

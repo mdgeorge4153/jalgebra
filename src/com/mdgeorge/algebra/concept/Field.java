@@ -18,4 +18,8 @@ public interface Field          <E>
 
 	/** @throws IllegalArgumentException if a is zero. */
 	E inv (E a) throws IllegalArgumentException;
+	
+	default E div (E a, E b) {
+		return times(a, inv(b));
+	}
 }

@@ -42,4 +42,9 @@ public class Floats implements Field<Float> {
 		
 		return 1/a;
 	}
+	
+	@Override
+	public Float fromInt(int i) {
+		return (float) i;
+	}
 }
