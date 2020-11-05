@@ -14,7 +14,7 @@ import javax.lang.model.element.TypeElement;
 import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
 
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.annotation.MagicProperty")
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_15)
 public class PropertyChecker
      extends AbstractProcessor
 {
@@ -30,7 +30,7 @@ public class PropertyChecker
 	
 	
 	@Override
-	public boolean process ( Set<? extends TypeElement> _
+	public boolean process ( Set<? extends TypeElement> _ignore
 			               , RoundEnvironment           roundEnv
 			               )
 	{

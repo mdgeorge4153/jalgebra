@@ -27,7 +27,7 @@ import com.mdgeorge.util.Utils;
 
 
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.annotation.MagicCheck")
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_15)
 public class TestGenerator
      extends AbstractProcessor
 {
@@ -40,7 +40,7 @@ public class TestGenerator
 	}
 
 	@Override
-	public boolean process ( Set<? extends TypeElement> _
+	public boolean process ( Set<? extends TypeElement> _ignore
 	                       , RoundEnvironment roundEnv
 	                       )
 	{
