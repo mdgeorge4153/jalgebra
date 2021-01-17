@@ -27,7 +27,7 @@ import com.mdgeorge.util.Utils;
 
 
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.annotation.MagicCheck")
-@SupportedSourceVersion(SourceVersion.RELEASE_15)
+@SupportedSourceVersion(SourceVersion.RELEASE_14)
 public class TestGenerator
      extends AbstractProcessor
 {

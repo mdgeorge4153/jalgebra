@@ -14,7 +14,7 @@ import javax.lang.model.element.TypeElement;
 import com.mdgeorge.algebra.properties.meta.annotation.MagicProperty;
 
 @SupportedAnnotationTypes("com.mdgeorge.algebra.properties.meta.annotation.MagicProperty")
-@SupportedSourceVersion(SourceVersion.RELEASE_15)
+@SupportedSourceVersion(SourceVersion.RELEASE_14)
 public class PropertyChecker
      extends AbstractProcessor
 {
